@@ -2,13 +2,12 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { GoogleLogin } from "@react-oauth/google";
-import API from "../api/axios";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import logoHorizontal from "../assets/logos/logo-horizontal.png";
 
 const Login = () => {
-  const { login } = useAuth();
-  const { loadCart } = useCart(); // 🔥 Important
+  const { login, googleLogin } = useAuth(); // ✅ added googleLogin (no logic removed)
+  const { loadCart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,7 +29,7 @@ const Login = () => {
       const response = await login(form);
 
       if (response.success) {
-        await loadCart(); // 🔥 Reload cart after merge
+        await loadCart(); // 🔥 existing logic kept
         navigate(from, { replace: true });
       } else {
         alert(response.error || "Invalid credentials");
@@ -42,22 +41,20 @@ const Login = () => {
     }
   };
 
-  // ================= GOOGLE LOGIN =================
+  // ================= GOOGLE LOGIN (FIXED ONLY HERE) =================
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true);
 
     try {
-      const res = await API.post("/users/google-login/", {
-        token: credentialResponse.credential,
-      });
+      // ✅ Use AuthContext method instead of direct API
+      const response = await googleLogin(credentialResponse.credential);
 
-      localStorage.setItem("access", res.data.access);
-      localStorage.setItem("refresh", res.data.refresh);
-
-      // 🔥 Reload cart after backend merge
-      await loadCart();
-
-      navigate(from, { replace: true });
+      if (response.success) {
+        await loadCart(); // 🔥 existing cart merge logic preserved
+        navigate(from, { replace: true });
+      } else {
+        alert(response.error || "Google login failed");
+      }
     } catch (err) {
       alert("Google login failed");
     } finally {
@@ -94,7 +91,6 @@ const Login = () => {
             required
           />
 
-          {/* Forgot Password */}
           <div className="text-right">
             <Link
               to="/forgot-password"
