@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-
 import logo from "../assets/logos/logo-horizontal.png";
 
 const Signup = () => {
@@ -10,8 +9,6 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    full_name: "",
-    username: "",
     email: "",
     password: "",
     confirm_password: "",
@@ -29,6 +26,7 @@ const Signup = () => {
     e.preventDefault();
     setError(null);
 
+    // ✅ Frontend password match validation
     if (form.password !== form.confirm_password) {
       setError("Passwords do not match");
       return;
@@ -36,8 +34,8 @@ const Signup = () => {
 
     setLoading(true);
 
+    // ✅ Send ONLY what backend expects
     const response = await signup({
-      username: form.username,
       email: form.email,
       password: form.password,
     });
@@ -47,7 +45,15 @@ const Signup = () => {
     if (response.success) {
       navigate("/login");
     } else {
-      setError("Signup failed. Try again.");
+      // ✅ Show backend error properly
+      if (typeof response.error === "string") {
+        setError(response.error);
+      } else if (typeof response.error === "object") {
+        const firstError = Object.values(response.error)[0];
+        setError(Array.isArray(firstError) ? firstError[0] : firstError);
+      } else {
+        setError("Signup failed. Please try again.");
+      }
     }
   };
 
@@ -56,8 +62,8 @@ const Signup = () => {
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8"
+        transition={{ duration: 0.4 }}
+        className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8"
       >
         {/* Logo */}
         <div className="flex justify-center mb-6">
@@ -68,9 +74,9 @@ const Signup = () => {
           Create Your Account
         </h2>
 
-        {/* Error */}
+        {/* Error Message */}
         {error && (
-          <div className="bg-red-50 text-red-500 text-sm p-3 rounded-lg mb-4">
+          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg mb-4 border border-red-100">
             {error}
           </div>
         )}
@@ -78,18 +84,10 @@ const Signup = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-            onChange={handleChange}
-            required
-          />
-
-          <input
             type="email"
             name="email"
             placeholder="Email Address"
+            autoComplete="email"
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
             onChange={handleChange}
             required
@@ -100,6 +98,7 @@ const Signup = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
+              autoComplete="new-password"
               className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
               onChange={handleChange}
               required
@@ -118,6 +117,7 @@ const Signup = () => {
             type="password"
             name="confirm_password"
             placeholder="Confirm Password"
+            autoComplete="new-password"
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
             onChange={handleChange}
             required
@@ -132,22 +132,6 @@ const Signup = () => {
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="px-3 text-gray-400 text-sm">OR</span>
-          <div className="flex-1 h-px bg-gray-200" />
-        </div>
-
-        {/* Google Button */}
-        <Link
-          to="/login"
-          className="w-full block text-center border border-gray-300 p-3 rounded-lg hover:bg-gray-50 transition"
-        >
-          Continue with Google
-        </Link>
-
-        {/* Login Link */}
         <p className="text-center text-sm mt-6 text-gray-500">
           Already have an account?{" "}
           <Link to="/login" className="text-accent font-medium">

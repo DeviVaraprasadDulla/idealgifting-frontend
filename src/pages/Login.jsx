@@ -6,7 +6,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import logoHorizontal from "../assets/logos/logo-horizontal.png";
 
 const Login = () => {
-  const { login, googleLogin } = useAuth(); // ✅ added googleLogin (no logic removed)
+  const { login, googleLogin } = useAuth();
   const { loadCart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,44 +19,46 @@ const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // ================= NORMAL LOGIN =================
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage("");
 
     try {
       const response = await login(form);
 
       if (response.success) {
-        await loadCart(); // 🔥 existing logic kept
+        await loadCart();
         navigate(from, { replace: true });
       } else {
-        alert(response.error || "Invalid credentials");
+        setErrorMessage(response.error || "Invalid credentials");
       }
     } catch (err) {
-      alert("Login failed");
+      setErrorMessage("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // ================= GOOGLE LOGIN (FIXED ONLY HERE) =================
+  // ================= GOOGLE LOGIN =================
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true);
+    setErrorMessage("");
 
     try {
-      // ✅ Use AuthContext method instead of direct API
       const response = await googleLogin(credentialResponse.credential);
 
       if (response.success) {
-        await loadCart(); // 🔥 existing cart merge logic preserved
+        await loadCart();
         navigate(from, { replace: true });
       } else {
-        alert(response.error || "Google login failed");
+        setErrorMessage(response.error || "Google login failed");
       }
     } catch (err) {
-      alert("Google login failed");
+      setErrorMessage("Google login failed");
     } finally {
       setLoading(false);
     }
@@ -64,13 +66,13 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-lightbg px-4">
-      <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 sm:p-8 md:p-10">
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <img src={logoHorizontal} alt="Ideal Gifting" className="h-10" />
         </div>
 
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl font-semibold text-center mb-6">
           Welcome Back
         </h2>
 
@@ -100,6 +102,13 @@ const Login = () => {
             </Link>
           </div>
 
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+              {errorMessage}
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={loading}
@@ -111,10 +120,10 @@ const Login = () => {
 
         <div className="my-6 text-center text-gray-400">OR</div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center w-full">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => alert("Google Login Failed")}
+            onError={() => setErrorMessage("Google Login Failed")}
           />
         </div>
 
