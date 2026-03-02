@@ -19,6 +19,7 @@ import Cart from "./pages/Cart";
 import Payment from "./pages/payment/Payment";
 import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import OrderTracking from "./pages/OrderTracking";
+import AboutSection from "./components/AboutSection";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -29,6 +30,7 @@ function App() {
       <Route element={<MainLayout />}>
         {/* Public Pages */}
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutSection />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/products" element={<ProductListPage />} />
         <Route
