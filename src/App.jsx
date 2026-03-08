@@ -21,6 +21,11 @@ import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import OrderTracking from "./pages/OrderTracking";
 import AboutSection from "./components/AboutSection";
 
+import RefundPolicy from "./pages/legal/RefundPolicy";
+import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
+import Terms from "./pages/legal/Terms";
+import Contact from "./pages/legal/Contact";
+
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
@@ -97,6 +102,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
 
       {/* Auth without layout */}

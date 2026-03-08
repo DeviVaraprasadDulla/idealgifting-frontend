@@ -54,6 +54,18 @@ function Footer() {
                 My Orders
               </Link>
             </li>
+            <li>
+              <Link to="/privacy-policy">Privacy Policy</Link>
+            </li>
+            <li>
+              <Link to="/refund-policy">Refund Policy</Link>
+            </li>
+            <li>
+              <Link to="/terms">Terms & Conditions</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact</Link>
+            </li>
           </ul>
         </div>
 
