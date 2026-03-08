@@ -15,7 +15,8 @@ const Contact = () => {
         </p>
 
         <p>
-          <strong>Address:</strong> Ideal Gifting, India
+          <strong>Address:</strong> Road No.4C, Kothapet, Hyderabad, Ideal
+          Gifting, India
         </p>
       </div>
     </PageContainer>
