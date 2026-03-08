@@ -7,11 +7,11 @@ const Contact = () => {
 
       <div className="space-y-4">
         <p>
-          <strong>Email:</strong> support@idealgifting.in
+          <strong>Email:</strong> idealgifting.in@gmail.com
         </p>
 
         <p>
-          <strong>Phone:</strong> +91 XXXXX XXXXX
+          <strong>Phone:</strong> +91 63055 40600
         </p>
 
         <p>

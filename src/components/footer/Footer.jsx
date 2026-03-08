@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Instagram,
   Facebook,
@@ -7,9 +7,22 @@ import {
   MapPin,
   MessageCircle,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import logo from "../../assets/logos/logo-inverse.png";
 
 function Footer() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+
+    // Smooth scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <footer className="bg-[#0F172A] text-gray-300 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-10">
@@ -33,38 +46,86 @@ function Footer() {
         {/* QUICK LINKS */}
         <div>
           <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
+
           <ul className="space-y-3 text-sm">
             <li>
-              <Link to="/" className="hover:text-accent transition">
+              <Link
+                to="/"
+                onClick={() => handleNavigate("/")}
+                className="hover:text-accent transition"
+              >
                 Home
               </Link>
             </li>
+
             <li>
-              <Link to="/about" className="hover:text-accent transition">
+              <Link
+                to="/about"
+                onClick={() => handleNavigate("/about")}
+                className="hover:text-accent transition"
+              >
                 About Us
               </Link>
             </li>
+
             <li>
-              <Link to="/cart" className="hover:text-accent transition">
+              <Link
+                to="/cart"
+                onClick={() => handleNavigate("/cart")}
+                className="hover:text-accent transition"
+              >
                 Cart
               </Link>
             </li>
+
             <li>
-              <Link to="/orders" className="hover:text-accent transition">
+              <Link
+                to="/orders"
+                onClick={() => handleNavigate("/orders")}
+                className="hover:text-accent transition"
+              >
                 My Orders
               </Link>
             </li>
+
             <li>
-              <Link to="/privacy-policy">Privacy Policy</Link>
+              <Link
+                to="/privacy-policy"
+                onClick={() => handleNavigate("/privacy-policy")}
+                className="hover:text-accent transition"
+              >
+                Privacy Policy
+              </Link>
             </li>
+
             <li>
-              <Link to="/refund-policy">Refund Policy</Link>
+              <Link
+                to="/refund-policy"
+                onClick={() => handleNavigate("/refund-policy")}
+                className="hover:text-accent transition"
+              >
+                Refund Policy
+              </Link>
             </li>
+
             <li>
-              <Link to="/terms">Terms & Conditions</Link>
+              <Link
+                to="/terms"
+                onClick={() => handleNavigate("/terms")}
+                className="hover:text-accent transition"
+              >
+                Terms & Conditions
+              </Link>
             </li>
+
             <li>
-              <Link to="/contact">Contact</Link>
+              <Link
+                to="/contact"
+                onClick={() => handleNavigate("/contact")}
+                className="hover:text-accent transition"
+              >
+                Contact
+              </Link>
             </li>
           </ul>
         </div>
@@ -109,32 +170,35 @@ function Footer() {
           <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
 
           <div className="flex gap-4">
-            <a
+            <motion.a
+              whileHover={{ scale: 1.2 }}
               href="https://www.instagram.com/idealgifting/"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#1E293B] hover:bg-accent transition p-3 rounded-full"
             >
               <Instagram size={18} />
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
+              whileHover={{ scale: 1.2 }}
               href="https://www.facebook.com/idealgifting.in"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#1E293B] hover:bg-accent transition p-3 rounded-full"
             >
               <Facebook size={18} />
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
+              whileHover={{ scale: 1.2 }}
               href="https://wa.me/916305540600"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#1E293B] hover:bg-green-500 transition p-3 rounded-full"
             >
               <MessageCircle size={18} />
-            </a>
+            </motion.a>
           </div>
         </div>
       </div>

@@ -1,28 +1,61 @@
-import PageContainer from "../../components/common/PageContainer";
+import LegalLayout from "../../components/legal/LegalLayout";
 
 const Terms = () => {
-  return (
-    <PageContainer title="Terms & Conditions">
-      <h2 className="text-xl font-semibold text-[#0B1C2D]">Payments</h2>
+  const sections = [
+    {
+      id: "payments",
+      label: "Payments",
+      content: (
+        <>
+          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+            Payments
+          </h2>
 
-      <ul className="list-disc pl-6 space-y-2">
-        <li>We do not offer Cash on Delivery.</li>
-        <li>All orders must be paid 100% in advance.</li>
-        <li>Orders confirmed only after successful payment.</li>
-      </ul>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>We do not offer Cash on Delivery.</li>
+            <li>Orders must be paid 100% in advance.</li>
+            <li>Orders confirmed after successful payment.</li>
+          </ul>
+        </>
+      ),
+    },
 
-      <h2 className="text-xl font-semibold text-[#0B1C2D]">Customization</h2>
+    {
+      id: "customization",
+      label: "Customization",
+      content: (
+        <>
+          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+            Customization & Approval
+          </h2>
 
-      <ul className="list-disc pl-6 space-y-2">
-        <li>Customers must provide correct names, dates and photos.</li>
-        <li>Once design is approved it will be considered final.</li>
-      </ul>
+          <p>
+            Customers must provide accurate names, photos and details. Once
+            design is approved it will be considered final.
+          </p>
+        </>
+      ),
+    },
 
-      <h2 className="text-xl font-semibold text-[#0B1C2D]">Delivery</h2>
+    {
+      id: "delivery",
+      label: "Delivery",
+      content: (
+        <>
+          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+            Delivery & Production
+          </h2>
 
-      <p>Delivery timelines vary depending on product type and location.</p>
-    </PageContainer>
-  );
+          <p>
+            Delivery timelines vary depending on product type, customization and
+            courier services.
+          </p>
+        </>
+      ),
+    },
+  ];
+
+  return <LegalLayout title="Terms & Conditions" sections={sections} />;
 };
 
 export default Terms;
