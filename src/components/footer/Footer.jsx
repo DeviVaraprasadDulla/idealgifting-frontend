@@ -143,6 +143,12 @@ function Footer() {
                 6305540600
               </a>
             </li>
+            <li className="flex items-center gap-2">
+              <Phone size={16} />
+              <a href="tel:6305540600" className="hover:text-accent transition">
+                9346325483
+              </a>
+            </li>
 
             <li className="flex items-center gap-2">
               <Mail size={16} />
@@ -151,6 +157,15 @@ function Footer() {
                 className="hover:text-accent transition"
               >
                 idealgifting.in@gmail.com
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Mail size={16} />
+              <a
+                href="mailto:idealgifting.in@gmail.com"
+                className="hover:text-accent transition"
+              >
+                anveshawar.ig@gmail.com
               </a>
             </li>
 
