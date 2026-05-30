@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         const userData = await getCurrentUser();
-        setUser(userData);
+        setUser(null);
       } catch (error) {
         console.log("Token invalid. Logging out.");
         localStorage.removeItem("access");
@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }) => {
         googleLogin,
       }}
     >
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

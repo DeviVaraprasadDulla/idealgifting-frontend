@@ -48,7 +48,7 @@ const Navbar = ({ topOffset = 0 }) => {
     const fetchData = async () => {
       try {
         const data = await getMegaMenu();
-        setCategories(data || []);
+        setCategories(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error(err);
       }
@@ -105,13 +105,13 @@ const Navbar = ({ topOffset = 0 }) => {
     setMobileSearchOpen(false);
   };
 
-  const totalCartCount = cartItems.reduce(
-    (acc, item) => acc + item.quantity,
-    0,
-  );
+const totalCartCount = Array.isArray(cartItems)
+  ? cartItems.reduce((acc, item) => acc + item.quantity, 0)
+  : 0;
 
-  const activeCategory = categories.find((c) => c.id === activeMenu);
-
+const activeCategory = Array.isArray(categories)
+  ? categories.find((c) => c.id === activeMenu)
+  : null;
   return (
     <>
       {/* ================= NAVBAR ================= */}
