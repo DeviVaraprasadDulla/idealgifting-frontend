@@ -13,13 +13,13 @@ const HomeCategories = () => {
   const loadCategories = async () => {
     try {
       const res = await axios.get("categories/?is_trending=true");
-      setCategories(res.data);
+      setCategories(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Category load error:", err);
     }
   };
 
-  if (!categories.length) return null;
+if (!Array.isArray(categories) || categories.length === 0) return null;
 
   return (
     <section className="bg-white py-3">

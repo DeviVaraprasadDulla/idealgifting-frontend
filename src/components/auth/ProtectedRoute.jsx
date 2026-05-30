@@ -5,8 +5,9 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  // Wait until auth check finishes
-  if (loading) return null;
+  if (loading) {
+    return <div style={{ textAlign: "center", marginTop: "100px" }}>Loading...</div>;
+  }
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;

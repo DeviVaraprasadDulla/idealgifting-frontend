@@ -10,7 +10,7 @@ function FeaturedProducts() {
     const fetchProducts = async () => {
       try {
         const response = await getFeaturedProducts();
-        setProducts(response.data); // IMPORTANT
+        setProducts(Array.isArray(response) ? response : response.data || []); // IMPORTANT
       } catch (error) {
         console.error("Failed to fetch featured products", error);
       } finally {
@@ -49,7 +49,7 @@ function FeaturedProducts() {
         )}
 
         {/* Product Grid */}
-        {!loading && products.length > 0 && (
+        {!loading && Array.isArray(products) && products.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -58,7 +58,7 @@ function FeaturedProducts() {
         )}
 
         {/* Empty State */}
-        {!loading && products.length === 0 && (
+        {!loading && (!Array.isArray(products) || products.length === 0) && (
           <p className="text-gray-500 text-center">
             No featured products available.
           </p>
@@ -67,5 +67,4 @@ function FeaturedProducts() {
     </section>
   );
 }
-
 export default FeaturedProducts;

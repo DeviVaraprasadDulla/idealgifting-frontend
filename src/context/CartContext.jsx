@@ -7,14 +7,27 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   // ================= LOAD CART =================
+  // const loadCart = async () => {
+  //   try {
+  //     const res = await API.get("cart/items/");
+  //     setCartItems(res.data);
+  //   } catch (error) {
+  //     console.error("Cart load error:", error);
+  //   }
+  // };
   const loadCart = async () => {
-    try {
-      const res = await API.get("cart/items/");
-      setCartItems(res.data);
-    } catch (error) {
-      console.error("Cart load error:", error);
-    }
-  };
+  try {
+    const res = await API.get("cart/items/");
+
+    // ✅ FORCE ARRAY
+    const data = Array.isArray(res.data) ? res.data : [];
+
+    setCartItems(data);
+  } catch (error) {
+    console.error("Cart load error:", error);
+    setCartItems([]); // ✅ fallback
+  }
+};
 
   useEffect(() => {
     loadCart();
