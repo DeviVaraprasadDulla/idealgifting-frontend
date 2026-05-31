@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import API from "../../api/axios";
 import PaymentSummary from "./components/PaymentSummary";
 import WhatsAppOrderButton from "./components/WhatsAppOrderButton";
-
+import { useCart } from "../../context/CartContext";
 const Payment = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -12,17 +12,26 @@ const Payment = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState("razorpay");
-
+const { setCartItems } = useCart();
+const [verifyingPayment, setVerifyingPayment] = useState(false);
   // Fetch Order
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const res = await API.get(`/orders/by-token/${token}/`);
-        setOrder(res.data);
-      } catch (err) {
-        navigate("/orders");
-      }
-    };
+        const fetchOrder = async () => {
+          try {
+            const res = await API.get(`/orders/by-token/${token}/`);
+
+            if (res.data.payment_status === "PAID") {
+              navigate(`/payment-success/${token}`, {
+                replace: true,
+              });
+              return;
+            }
+
+            setOrder(res.data);
+          } catch (err) {
+            navigate("/orders");
+          }
+        };
 
     fetchOrder();
   }, [token, navigate]);
@@ -77,6 +86,7 @@ const loadRazorpay = () => {
 
       handler: async function (response) {
         try {
+          setVerifyingPayment(true);
           await API.post(
             "/payments/verify/",
             {
@@ -92,10 +102,11 @@ const loadRazorpay = () => {
                 response.razorpay_signature,
             }
           );
-
-          navigate(
-            `/payment-success/${token}`
-          );
+              // Immediately clear cart badge
+          setCartItems([]);
+          navigate(`/payment-success/${token}`, {
+            replace: true,
+          });
         } catch (error) {
           alert(
             "Payment verification failed"
@@ -122,7 +133,21 @@ const loadRazorpay = () => {
   }
 };
   if (!order) return null;
+  if (verifyingPayment) {
+  return (
+    <div className="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center">
+      <div className="w-16 h-16 border-4 border-gray-200 border-t-[#db1e57] rounded-full animate-spin" />
 
+      <h2 className="mt-5 text-xl font-semibold">
+        Processing Payment...
+      </h2>
+
+      <p className="text-gray-500 mt-2">
+        Please wait. Do not refresh or go back.
+      </p>
+    </div>
+  );
+}
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center px-4">
       <motion.div

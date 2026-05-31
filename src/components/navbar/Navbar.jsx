@@ -197,10 +197,14 @@ const activeCategory = Array.isArray(categories)
             </form>
 
             {/* Cart */}
-            <button onClick={() => setCartOpen(true)} className="relative">
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative"
+            >
               <ShoppingCart size={22} />
+
               {totalCartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-black text-white text-xs px-2 py-0.5 rounded-full">
+                <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full">
                   {totalCartCount}
                 </span>
               )}
@@ -261,9 +265,18 @@ const activeCategory = Array.isArray(categories)
               <Search size={22} />
             </button>
 
-            <button onClick={() => setCartOpen(true)}>
-              <ShoppingCart size={22} />
-            </button>
+              <button
+                onClick={() => setCartOpen(true)}
+                className="relative"
+              >
+                <ShoppingCart size={22} />
+
+                {totalCartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full">
+                    {totalCartCount}
+                  </span>
+                )}
+              </button>
 
             <button onClick={() => setMobileOpen(true)}>
               <Menu size={24} />

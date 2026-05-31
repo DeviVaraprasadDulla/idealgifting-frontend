@@ -27,9 +27,11 @@ import Terms from "./pages/legal/Terms";
 import Contact from "./pages/legal/Contact";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-
+import ScrollToTop from "./components/ScrollToTop";
 function App() {
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       {/* ================= Layout Wrapper ================= */}
       <Route element={<MainLayout />}>
@@ -42,7 +44,10 @@ function App() {
           path="/products/category/:categorySlug"
           element={<ProductListPage />}
         />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route
+            path="/products/:slug"
+            element={<ProductDetailPage />}
+          />
 
         {/* Forgot Password Pages INSIDE Layout */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -115,6 +120,7 @@ function App() {
       {/* 404 */}
       <Route path="*" element={<Home />} />
     </Routes>
+    </>
   );
 }
 

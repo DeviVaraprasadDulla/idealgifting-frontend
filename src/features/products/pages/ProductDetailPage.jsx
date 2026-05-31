@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { getProductDetail, getProducts } from "../../../api/productApi";
@@ -7,30 +7,31 @@ import { useCart } from "../../../context/CartContext";
 import ProductCard from "../components/ProductCard";
 
 function ProductDetailPage() {
-  const { id } = useParams();
-  const { addToCart } = useCart();
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const { addToCart, cartItems } = useCart();
 
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [mainImage, setMainImage] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
   // Lightbox
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [addToCartLoading, setAddToCartLoading] = useState(false);
   // Pinch zoom
   const [scale, setScale] = useState(1);
   const lastDistance = useRef(null);
 
   useEffect(() => {
     loadProduct();
-  }, [id]);
+  }, [slug]);
 
   const loadProduct = async () => {
     try {
       setLoading(true);
-      const res = await getProductDetail(id);
+      const res = await getProductDetail(slug);
       const data = res.data;
 
       setProduct(data);
@@ -100,7 +101,61 @@ function ProductDetailPage() {
       </div>
     );
   }
+const handleBuyNow = async () => {
+  if (!product) return;
 
+  if (product.stock <= 0) {
+    alert("This product is currently out of stock.");
+    return;
+  }
+
+  try {
+    setBuyNowLoading(true);
+
+    const alreadyInCart = cartItems.some(
+      (item) => item.product_id === product.id
+    );
+
+    if (!alreadyInCart) {
+      await addToCart(product.id, 1);
+    }
+
+    navigate("/checkout");
+
+  } catch (error) {
+    console.error("Buy Now Error:", error);
+
+    alert(
+      error?.response?.data?.error ||
+      "Unable to proceed to checkout."
+    );
+  } finally {
+    setBuyNowLoading(false);
+  }
+};
+const handleAddToCart = async () => {
+  if (!product) return;
+
+  if (product.stock <= 0) {
+    alert("This product is currently out of stock.");
+    return;
+  }
+
+  try {
+    setAddToCartLoading(true);
+
+    await addToCart(product.id, 1);
+  } catch (error) {
+    console.error("Add To Cart Error:", error);
+
+    alert(
+      error?.response?.data?.error ||
+      "Failed to add product to cart."
+    );
+  } finally {
+    setAddToCartLoading(false);
+  }
+};
   return (
     <>
       {/* ================= MAIN PAGE ================= */}
@@ -184,14 +239,23 @@ function ProductDetailPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <button
-                  onClick={() => addToCart(product.id)}
-                  className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition"
+                  onClick={handleAddToCart}
+                  disabled={addToCartLoading || product.stock <= 0}
+                  className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Add to Cart
+                  {addToCartLoading
+                    ? "Adding..."
+                    : product.stock <= 0
+                      ? "Out of Stock"
+                      : "Add to Cart"}
                 </button>
 
-                <button className="w-full border border-black py-3 rounded-xl hover:bg-gray-100 transition">
-                  Buy Now
+                <button
+                  onClick={handleBuyNow}
+                  disabled={buyNowLoading || product.stock <= 0}
+                  className="w-full border border-black py-3 rounded-xl hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {buyNowLoading ? "Processing..." : "Buy Now"}
                 </button>
               </div>
             </div>
