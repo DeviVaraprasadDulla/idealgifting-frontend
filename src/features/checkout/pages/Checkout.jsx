@@ -240,11 +240,11 @@ const handleSaveAddress = async () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 grid lg:grid-cols-3 gap-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-6 md:py-10 grid lg:grid-cols-3 gap-6 md:gap-8 overflow-x-hidden">
       {/* ================= LEFT SIDE ================= */}
       <div className="lg:col-span-2 space-y-8">
                 {/* ================= REVIEW ORDER ================= */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 overflow-hidden">
           <h3 className="text-lg md:text-xl font-semibold text-[#0B1C2D] mb-4">
             Review Your Order
           </h3>
@@ -252,22 +252,21 @@ const handleSaveAddress = async () => {
           {cartItems.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between border-b py-4"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b py-4 gap-3"
             >
-              <div className="flex items-center gap-4">
-                {/* Product Image */}
+              {/* Left Side */}
+              <div className="flex items-center gap-3 min-w-0">
                 <img
                   src={
                     item.product_image ||
                     "https://via.placeholder.com/80x80?text=No+Image"
                   }
                   alt={item.product_name}
-                  className="w-16 h-16 rounded-lg object-cover border"
+                  className="w-16 h-16 rounded-lg object-cover border flex-shrink-0"
                 />
 
-                {/* Product Details */}
-                <div>
-                  <p className="font-medium text-[#0B1C2D]">
+                <div className="min-w-0">
+                  <p className="font-medium text-[#0B1C2D] break-words line-clamp-2">
                     {item.product_name}
                   </p>
 
@@ -281,9 +280,12 @@ const handleSaveAddress = async () => {
                 </div>
               </div>
 
-              <p className="font-semibold text-[#0B1C2D]">
-                ₹{(item.product_price * item.quantity).toFixed(2)}
-              </p>
+              {/* Right Side */}
+              <div className="text-left sm:text-right">
+                <p className="font-semibold text-[#0B1C2D]">
+                  ₹{(item.product_price * item.quantity).toFixed(2)}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -313,7 +315,7 @@ const handleSaveAddress = async () => {
                       className="cursor-pointer"
                       onClick={() => setSelectedAddress(addr.id)}
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                         <div>
                           <p className="font-semibold text-[#0B1C2D] text-lg">
                             {addr.first_name} {addr.last_name}
@@ -335,7 +337,7 @@ const handleSaveAddress = async () => {
                       </div>
                     </div>
 
-            <div className="flex gap-4 mt-3">
+            <div className="flex flex-wrap gap-4 mt-3">
               <button
                 onClick={() => handleEditAddress(addr)}
                 className="text-sm text-blue-600 hover:underline"
@@ -369,7 +371,7 @@ const handleSaveAddress = async () => {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4 overflow-hidden"
                 >
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input
                       placeholder="First Name"
                       value={form.first_name}
@@ -410,7 +412,7 @@ const handleSaveAddress = async () => {
                     className="border rounded-lg px-3 py-2 w-full"
                   />
 
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <input
                         placeholder="City"
                         value={form.city}
@@ -514,7 +516,7 @@ const handleSaveAddress = async () => {
       </div>
 
       {/* ================= RIGHT SUMMARY ================= */}
-      <div className="lg:sticky lg:top-24 h-fit">
+      <div className="w-full lg:sticky lg:top-24 h-fit">
         <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
           <h3 className="text-lg md:text-xl font-semibold text-[#0B1C2D]">
             Order Summary
