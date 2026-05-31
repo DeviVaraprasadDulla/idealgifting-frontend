@@ -45,7 +45,7 @@ function ProductCard({ product }) {
       transition={{ type: "spring", stiffness: 200 }}
       className="bg-white rounded-2xl shadow-sm hover:shadow-lg overflow-hidden transition"
     >
-      <Link to={`/products/${product.id}`} className="block relative">
+        <Link to={`/products/${product.slug}`} className="block relative">
         {/* IMAGE */}
         <div className="relative aspect-square overflow-hidden">
           <img

@@ -102,7 +102,7 @@ const Orders = () => {
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <p className="text-sm text-gray-500">
-                    Order Number: {order.order_number}
+                    Order ID: #{order.order_token}
                   </p>
                   <p className="text-sm text-gray-500">
                     {new Date(order.created_at).toLocaleDateString()}

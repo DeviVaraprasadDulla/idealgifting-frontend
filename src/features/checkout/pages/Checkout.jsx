@@ -7,13 +7,13 @@ import API from "../../../api/axios";
 const Checkout = () => {
   const { cartItems, getCartTotal } = useCart();
   const navigate = useNavigate();
-
+const [errors, setErrors] = useState({});
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [savingAddress, setSavingAddress] = useState(false);
-
+const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -24,6 +24,47 @@ const Checkout = () => {
     state: "",
     zip_code: "",
   });
+const states = [
+  // States
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+
+  // Union Territories
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry",
+];
 
   const total = getCartTotal();
 
@@ -48,37 +89,117 @@ const Checkout = () => {
     loadAddresses();
   }, []);
 
+  const validateForm = () => {
+  // First Name
+  if (!form.first_name.trim()) {
+    alert("First name is required");
+    return false;
+  }
+
+  // Last Name
+  if (!form.last_name.trim()) {
+    alert("Last name is required");
+    return false;
+  }
+
+  // Phone Validation (10 digits only)
+  if (!/^[6-9]\d{9}$/.test(form.phone)) {
+    alert("Enter a valid 10-digit phone number");
+    return false;
+  }
+
+  // Address Validation
+  if (form.address_line1.trim().length < 10) {
+    alert("Please enter a complete address");
+    return false;
+  }
+
+  // City Validation
+  if (!/^[A-Za-z ]+$/.test(form.city)) {
+    alert("City should contain only letters");
+    return false;
+  }
+
+  // State Validation
+  if (!/^[A-Za-z ]+$/.test(form.state)) {
+    alert("State should contain only letters");
+    return false;
+  }
+
+  // ZIP Code Validation (India)
+  if (!/^[1-9][0-9]{5}$/.test(form.zip_code)) {
+    alert("Enter a valid 6-digit PIN code");
+    return false;
+  }
+
+  return true;
+};
+const handleEditAddress = (addr) => {
+  setForm({
+    first_name: addr.first_name,
+    last_name: addr.last_name,
+    phone: addr.phone,
+    address_line1: addr.address_line1,
+    address_line2: addr.address_line2 || "",
+    city: addr.city,
+    state: addr.state,
+    zip_code: addr.zip_code,
+  });
+
+  setEditingId(addr.id);
+  setShowForm(true);
+};
+
   // ================= Save Address =================
-  const handleSaveAddress = async () => {
-    try {
-      setSavingAddress(true);
+const handleSaveAddress = async () => {
+  if (!validateForm()) return;
 
-      const res = await API.post("/orders/save-address/", form);
+  try {
+    setSavingAddress(true);
 
-      await loadAddresses();
+    let res;
 
-      if (res.data?.id) {
-        setSelectedAddress(res.data.id);
-      }
-
-      setForm({
-        first_name: "",
-        last_name: "",
-        phone: "",
-        address_line1: "",
-        address_line2: "",
-        city: "",
-        state: "",
-        zip_code: "",
-      });
-
-      setShowForm(false);
-    } catch (err) {
-      alert(err.response?.data?.error || "Failed to save address");
-    } finally {
-      setSavingAddress(false);
+    if (editingId) {
+      res = await API.put(
+        `/orders/addresses/${editingId}/update/`,
+        form
+      );
+    } else {
+      res = await API.post(
+        "/orders/save-address/",
+        form
+      );
     }
-  };
+
+    await loadAddresses();
+
+    if (!editingId && res.data?.id) {
+      setSelectedAddress(res.data.id);
+    }
+
+    setForm({
+      first_name: "",
+      last_name: "",
+      phone: "",
+      address_line1: "",
+      address_line2: "",
+      city: "",
+      state: "",
+      zip_code: "",
+    });
+
+    setEditingId(null);
+    setShowForm(false);
+
+  } catch (err) {
+    alert(
+      err.response?.data?.error ||
+      "Failed to save address"
+    );
+  } finally {
+    setSavingAddress(false);
+  }
+};
 
   // ================= Remove Address =================
   const handleRemoveAddress = async (id) => {
@@ -122,6 +243,50 @@ const Checkout = () => {
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 grid lg:grid-cols-3 gap-8">
       {/* ================= LEFT SIDE ================= */}
       <div className="lg:col-span-2 space-y-8">
+                {/* ================= REVIEW ORDER ================= */}
+        <div className="bg-white rounded-2xl shadow-md p-6">
+          <h3 className="text-lg md:text-xl font-semibold text-[#0B1C2D] mb-4">
+            Review Your Order
+          </h3>
+
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center justify-between border-b py-4"
+            >
+              <div className="flex items-center gap-4">
+                {/* Product Image */}
+                <img
+                  src={
+                    item.product_image ||
+                    "https://via.placeholder.com/80x80?text=No+Image"
+                  }
+                  alt={item.product_name}
+                  className="w-16 h-16 rounded-lg object-cover border"
+                />
+
+                {/* Product Details */}
+                <div>
+                  <p className="font-medium text-[#0B1C2D]">
+                    {item.product_name}
+                  </p>
+
+                  <p className="text-sm text-gray-500">
+                    Qty: {item.quantity}
+                  </p>
+
+                  <p className="text-sm text-[#db1e57] font-semibold">
+                    ₹{item.product_price}
+                  </p>
+                </div>
+              </div>
+
+              <p className="font-semibold text-[#0B1C2D]">
+                ₹{(item.product_price * item.quantity).toFixed(2)}
+              </p>
+            </div>
+          ))}
+        </div>
         {/* Shipping Section */}
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-[#0B1C2D] mb-6">
@@ -130,7 +295,9 @@ const Checkout = () => {
 
           <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
             {addresses.length === 0 && (
-              <p className="text-gray-500">No saved addresses</p>
+              <div className="bg-orange-50 border border-orange-200 text-orange-700 p-4 rounded-xl">
+                No shipping address found. Please add an address to continue checkout.
+              </div>
             )}
 
             {addresses.map((addr) => (
@@ -143,23 +310,46 @@ const Checkout = () => {
                 }`}
               >
                 <div
-                  className="cursor-pointer"
-                  onClick={() => setSelectedAddress(addr.id)}
-                >
-                  <p className="font-semibold text-[#0B1C2D]">
-                    {addr.first_name} {addr.last_name}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {addr.address_line1}, {addr.city}
-                  </p>
-                </div>
+                      className="cursor-pointer"
+                      onClick={() => setSelectedAddress(addr.id)}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-semibold text-[#0B1C2D] text-lg">
+                            {addr.first_name} {addr.last_name}
+                          </p>
 
-                <button
-                  onClick={() => handleRemoveAddress(addr.id)}
-                  className="text-xs text-red-500 mt-2 hover:underline"
-                >
-                  Remove
-                </button>
+                          <p className="text-gray-600 mt-1 leading-relaxed">
+                            {addr.address_line1}
+                            {addr.address_line2 && `, ${addr.address_line2}`}
+                          </p>
+
+                          <p className="text-gray-600">
+                            {addr.city}, {addr.state} - {addr.zip_code}
+                          </p>
+
+                          <p className="text-gray-600">
+                            Phone: {addr.phone}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+            <div className="flex gap-4 mt-3">
+              <button
+                onClick={() => handleEditAddress(addr)}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Edit
+              </button>
+
+              <button
+                onClick={() => handleRemoveAddress(addr.id)}
+                className="text-sm text-red-500 hover:underline"
+              >
+                Remove
+              </button>
+            </div>
               </div>
             ))}
 
@@ -198,14 +388,18 @@ const Checkout = () => {
                     />
                   </div>
 
-                  <input
-                    placeholder="Phone"
-                    value={form.phone}
-                    onChange={(e) =>
-                      setForm({ ...form, phone: e.target.value })
-                    }
-                    className="border rounded-lg px-3 py-2 w-full"
-                  />
+                    <input
+                      placeholder="Phone"
+                      value={form.phone}
+                      maxLength={10}
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          phone: e.target.value.replace(/\D/g, ""),
+                        })
+                      }
+                      className="border rounded-lg px-3 py-2 w-full"
+                    />
 
                   <input
                     placeholder="Address Line 1"
@@ -217,30 +411,86 @@ const Checkout = () => {
                   />
 
                   <div className="grid md:grid-cols-3 gap-4">
-                    <input
-                      placeholder="City"
-                      value={form.city}
-                      onChange={(e) =>
-                        setForm({ ...form, city: e.target.value })
-                      }
-                      className="border rounded-lg px-3 py-2"
-                    />
-                    <input
-                      placeholder="State"
-                      value={form.state}
-                      onChange={(e) =>
-                        setForm({ ...form, state: e.target.value })
-                      }
-                      className="border rounded-lg px-3 py-2"
-                    />
-                    <input
-                      placeholder="Zip Code"
-                      value={form.zip_code}
-                      onChange={(e) =>
-                        setForm({ ...form, zip_code: e.target.value })
-                      }
-                      className="border rounded-lg px-3 py-2"
-                    />
+                      <input
+                        placeholder="City"
+                        value={form.city}
+                        onChange={(e) =>
+                          setForm({
+                            ...form,
+                            city: e.target.value.replace(/[^A-Za-z ]/g, ""),
+                          })
+                        }
+                        className="border rounded-lg px-3 py-2"
+                      />
+                        <select
+                          value={form.state}
+                          onChange={(e) =>
+                            setForm({
+                              ...form,
+                              state: e.target.value,
+                            })
+                          }
+                          className="border rounded-lg px-3 py-2"
+                        >
+                          <option value="">Select State</option>
+
+                          {states.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                          <input
+                            placeholder="PIN Code"
+                            value={form.zip_code}
+                            maxLength={6}
+                            onChange={(e) => {
+                              const value = e.target.value;
+
+                              // Check for letters/special characters first
+                              if (!/^\d*$/.test(value)) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  zip_code: "Only numbers are allowed",
+                                }));
+                                return;
+                              }
+
+                              setForm({
+                                ...form,
+                                zip_code: value,
+                              });
+
+                              if (value.length > 0 && value.length < 6) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  zip_code: "PIN code must be 6 digits",
+                                }));
+                              } else if (
+                                value.length === 6 &&
+                                !/^[1-9][0-9]{5}$/.test(value)
+                              ) {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  zip_code: "Invalid PIN code",
+                                }));
+                              } else {
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  zip_code: "",
+                                }));
+                              }
+                            }}
+                            className={`border rounded-lg px-3 py-2 ${
+                              errors.zip_code ? "border-red-500" : ""
+                            }`}
+                          />
+
+                          {errors.zip_code && (
+                            <p className="text-red-500 text-xs mt-1">
+                              {errors.zip_code}
+                            </p>
+                          )}
                   </div>
 
                   <button
@@ -248,7 +498,11 @@ const Checkout = () => {
                     disabled={savingAddress}
                     className="bg-[#0B1C2D] text-white px-6 py-2 rounded-xl"
                   >
-                    {savingAddress ? "Saving..." : "Save Address"}
+                    {savingAddress
+                        ? "Saving..."
+                        : editingId
+                        ? "Update Address"
+                        : "Save Address"}
                   </button>
                 </motion.div>
               )}
@@ -256,25 +510,7 @@ const Checkout = () => {
           </div>
         </div>
 
-        {/* ================= REVIEW ORDER ================= */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
-          <h3 className="text-lg md:text-xl font-semibold text-[#0B1C2D] mb-4">
-            Review Your Order
-          </h3>
 
-          {cartItems.map((item) => (
-            <div key={item.id} className="flex justify-between border-b py-3">
-              <div>
-                <p className="font-medium">{item.product_name}</p>
-                <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
-              </div>
-
-              <p className="font-semibold text-[#0B1C2D]">
-                ₹{(item.product_price * item.quantity).toFixed(2)}
-              </p>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* ================= RIGHT SUMMARY ================= */}
@@ -296,10 +532,28 @@ const Checkout = () => {
             <span>₹{total.toFixed(2)}</span>
           </div>
 
+          {/* Address Validation Messages */}
+
+          {addresses.length === 0 && (
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-xl text-sm">
+              Please add a shipping address to continue.
+            </div>
+          )}
+
+          {addresses.length > 0 && !selectedAddress && (
+            <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-xl text-sm">
+              Please select a shipping address to place your order.
+            </div>
+          )}
+
           <button
             disabled={!selectedAddress || loading}
             onClick={handlePlaceOrder}
-            className="w-full py-3 rounded-xl text-white bg-[#0B1C2D]"
+            className={`w-full py-3 rounded-xl text-white transition ${
+              !selectedAddress || loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#0B1C2D] hover:bg-[#152B42]"
+            }`}
           >
             {loading ? "Creating Order..." : "Place Order"}
           </button>
