@@ -28,28 +28,32 @@ const FloatingWhatsApp = () => {
         <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-navy rotate-45"></div>
       </motion.div>
 
-      {/* Pulsing ring (matches client reference, respects prefers-reduced-motion) */}
-      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-55 motion-safe:animate-ping [animation-duration:2.6s]" />
+      {/* Ping ring + button share their own fixed-size relative box, kept
+          separate from the tooltip so the ring can never stretch to match
+          the tooltip's (invisible-but-still-laid-out) width. */}
+      <div className="relative w-[52px] h-[52px] md:w-[58px] md:h-[58px] flex-shrink-0">
+        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-55 motion-safe:animate-ping [animation-duration:2.6s]" />
 
-      <motion.a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onHoverStart={() => setHovered(true)}
-        onHoverEnd={() => setHovered(false)}
-        whileHover={{ scale: 1.05, y: -3 }}
-        whileTap={{ scale: 0.95 }}
-        className="relative w-[52px] h-[52px] md:w-[58px] md:h-[58px] rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_10px_24px_-8px_rgba(37,211,102,.6),0_2px_6px_rgba(15,33,64,.2)] hover:shadow-[0_14px_30px_-8px_rgba(37,211,102,.7),0_3px_8px_rgba(15,33,64,.25)] transition-shadow"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 32 32"
-          fill="white"
-          className="w-6 h-6 md:w-7 md:h-7"
+        <motion.a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onHoverStart={() => setHovered(true)}
+          onHoverEnd={() => setHovered(false)}
+          whileHover={{ scale: 1.05, y: -3 }}
+          whileTap={{ scale: 0.95 }}
+          className="absolute inset-0 rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_10px_24px_-8px_rgba(37,211,102,.6),0_2px_6px_rgba(15,33,64,.2)] hover:shadow-[0_14px_30px_-8px_rgba(37,211,102,.7),0_3px_8px_rgba(15,33,64,.25)] transition-shadow"
         >
-          <path d="M16 .396C7.163.396 0 7.559 0 16.396c0 2.885.756 5.598 2.073 7.965L0 32l7.857-2.041a15.93 15.93 0 0 0 8.143 2.237c8.837 0 16-7.163 16-16S24.837.396 16 .396zm0 29.165c-2.553 0-4.967-.662-7.075-1.828l-.505-.299-4.66 1.211 1.243-4.541-.329-.527a13.962 13.962 0 0 1-2.145-7.381c0-7.72 6.28-14 14-14s14 6.28 14 14-6.28 14-14 14zm7.595-10.485c-.414-.207-2.45-1.207-2.829-1.343-.379-.138-.655-.207-.931.207s-1.07 1.343-1.312 1.621c-.241.276-.482.31-.896.103-.414-.207-1.747-.643-3.328-2.049-1.23-1.096-2.059-2.449-2.3-2.863-.241-.414-.026-.638.181-.845.187-.186.414-.482.621-.724.207-.241.276-.414.414-.69.138-.276.069-.517-.034-.724-.103-.207-.931-2.242-1.276-3.069-.336-.807-.677-.698-.931-.711l-.793-.014c-.276 0-.724.103-1.103.517s-1.448 1.414-1.448 3.448c0 2.034 1.483 4 1.69 4.276.207.276 2.92 4.459 7.084 6.254.99.427 1.762.681 2.364.871.993.315 1.897.271 2.613.165.797-.119 2.45-1 2.794-1.966.345-.965.345-1.793.241-1.966-.103-.172-.379-.276-.793-.483z" />
-        </svg>
-      </motion.a>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            fill="white"
+            className="w-6 h-6 md:w-7 md:h-7"
+          >
+            <path d="M16 .396C7.163.396 0 7.559 0 16.396c0 2.885.756 5.598 2.073 7.965L0 32l7.857-2.041a15.93 15.93 0 0 0 8.143 2.237c8.837 0 16-7.163 16-16S24.837.396 16 .396zm0 29.165c-2.553 0-4.967-.662-7.075-1.828l-.505-.299-4.66 1.211 1.243-4.541-.329-.527a13.962 13.962 0 0 1-2.145-7.381c0-7.72 6.28-14 14-14s14 6.28 14 14-6.28 14-14 14zm7.595-10.485c-.414-.207-2.45-1.207-2.829-1.343-.379-.138-.655-.207-.931.207s-1.07 1.343-1.312 1.621c-.241.276-.482.31-.896.103-.414-.207-1.747-.643-3.328-2.049-1.23-1.096-2.059-2.449-2.3-2.863-.241-.414-.026-.638.181-.845.187-.186.414-.482.621-.724.207-.241.276-.414.414-.69.138-.276.069-.517-.034-.724-.103-.207-.931-2.242-1.276-3.069-.336-.807-.677-.698-.931-.711l-.793-.014c-.276 0-.724.103-1.103.517s-1.448 1.414-1.448 3.448c0 2.034 1.483 4 1.69 4.276.207.276 2.92 4.459 7.084 6.254.99.427 1.762.681 2.364.871.993.315 1.897.271 2.613.165.797-.119 2.45-1 2.794-1.966.345-.965.345-1.793.241-1.966-.103-.172-.379-.276-.793-.483z" />
+          </svg>
+        </motion.a>
+      </div>
     </div>
   );
 };
