@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -24,11 +24,7 @@ function ProductDetailPage() {
   const [scale, setScale] = useState(1);
   const lastDistance = useRef(null);
 
-  useEffect(() => {
-    loadProduct();
-  }, [slug]);
-
-  const loadProduct = async () => {
+  const loadProduct = useCallback(async () => {
     try {
       setLoading(true);
       const res = await getProductDetail(slug);
@@ -51,7 +47,11 @@ function ProductDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    loadProduct();
+  }, [loadProduct]);
 
   const openLightbox = (index) => {
     setCurrentIndex(index);
@@ -96,7 +96,7 @@ function ProductDetailPage() {
 
   if (loading || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center text-navy font-display">
         Loading...
       </div>
     );
@@ -159,14 +159,23 @@ const handleAddToCart = async () => {
   return (
     <>
       {/* ================= MAIN PAGE ================= */}
-      <div className="bg-gray-100 min-h-screen py-6 md:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="min-h-screen py-8 md:py-12 pb-28 lg:pb-12">
+        <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
+          {/* BREADCRUMB */}
+          <div className="text-sm text-muted mb-6 flex items-center gap-2 flex-wrap">
+            <span>Home</span>
+            <span>/</span>
+            <span>Gifts</span>
+            <span>/</span>
+            <span className="text-navy font-medium">{product.name}</span>
+          </div>
+
           {/* TOP SECTION */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 bg-white rounded-2xl shadow-sm p-6 md:p-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 bg-paper rounded-rl shadow-card p-6 md:p-10">
             {/* IMAGE SECTION */}
-            <div className="space-y-4">
+            <div className="space-y-4 lg:sticky lg:top-[112px] lg:self-start">
               <div
-                className="relative overflow-hidden rounded-xl group cursor-zoom-in"
+                className="relative overflow-hidden rounded-rl group cursor-zoom-in bg-world-soft"
                 onClick={() => openLightbox(0)}
               >
                 <motion.img
@@ -185,9 +194,9 @@ const handleAddToCart = async () => {
                       setMainImage(img.image);
                       openLightbox(index);
                     }}
-                    className={`h-20 w-20 object-cover rounded-lg cursor-pointer border-2 ${
+                    className={`h-20 w-20 object-cover rounded-rs cursor-pointer border-2 transition-colors ${
                       mainImage === img.image
-                        ? "border-black"
+                        ? "border-navy"
                         : "border-transparent"
                     }`}
                   />
@@ -197,29 +206,29 @@ const handleAddToCart = async () => {
 
             {/* PRODUCT INFO */}
             <div className="space-y-6">
-              <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
+              <h1 className="text-d3 text-navy">{product.name}</h1>
 
               <div className="flex items-center gap-2">
-                <span className="text-yellow-500 font-medium">
-                  ⭐ {product.average_rating}
+                <span className="text-gold font-medium">
+                  ★ {product.average_rating}
                 </span>
-                <span className="text-gray-500 text-sm">
+                <span className="text-muted text-sm">
                   ({product.rating_count} reviews)
                 </span>
               </div>
 
-              <div className="flex items-center gap-4">
-                <span className="text-3xl font-bold text-green-600">
+              <div className="flex items-center gap-4 flex-wrap">
+                <span className="font-num font-extrabold text-3xl text-navy">
                   ₹{product.discounted_price}
                 </span>
 
                 {product.discount_percentage > 0 && (
                   <>
-                    <span className="line-through text-gray-400 text-lg">
+                    <span className="font-num line-through text-muted text-lg">
                       ₹{product.price}
                     </span>
-                    <span className="bg-red-100 text-red-600 text-sm px-2 py-1 rounded-lg">
-                      {product.discount_percentage}% OFF
+                    <span className="bg-navy text-ivory text-xs font-bold uppercase tracking-wide px-3 py-1 rounded-full">
+                      {product.discount_percentage}% off
                     </span>
                   </>
                 )}
@@ -227,33 +236,33 @@ const handleAddToCart = async () => {
 
               <div>
                 {product.stock > 0 ? (
-                  <span className="text-green-600 font-medium">In Stock</span>
+                  <span className="text-leaf font-medium">In Stock</span>
                 ) : (
-                  <span className="text-red-600 font-medium">Out of Stock</span>
+                  <span className="text-burgundy font-medium">Out of Stock</span>
                 )}
               </div>
 
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-muted leading-relaxed">
                 {product.description}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="hidden lg:flex flex-col sm:flex-row gap-4 pt-4">
                 <button
                   onClick={handleAddToCart}
                   disabled={addToCartLoading || product.stock <= 0}
-                  className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-navy text-ivory py-3.5 rounded-full font-semibold shadow-card hover:-translate-y-0.5 hover:shadow-elevated transition-all disabled:opacity-40 disabled:pointer-events-none"
                 >
                   {addToCartLoading
                     ? "Adding..."
                     : product.stock <= 0
                       ? "Out of Stock"
-                      : "Add to Cart"}
+                      : "Add to Gift Box"}
                 </button>
 
                 <button
                   onClick={handleBuyNow}
                   disabled={buyNowLoading || product.stock <= 0}
-                  className="w-full border border-black py-3 rounded-xl hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-peach text-navy py-3.5 rounded-full font-semibold shadow-card hover:-translate-y-0.5 hover:shadow-elevated transition-all disabled:opacity-40 disabled:pointer-events-none"
                 >
                   {buyNowLoading ? "Processing..." : "Buy Now"}
                 </button>
@@ -262,23 +271,23 @@ const handleAddToCart = async () => {
           </div>
 
           {/* REVIEWS */}
-          <div className="mt-16 bg-white rounded-2xl shadow-sm p-8">
-            <h2 className="text-xl font-semibold mb-6">Customer Reviews</h2>
+          <div id="reviews" className="mt-14 bg-paper rounded-rl shadow-card p-8">
+            <h2 className="text-d4 text-navy mb-6">Customer Reviews</h2>
 
             {product.reviews?.length === 0 ? (
-              <p className="text-gray-500">No reviews yet.</p>
+              <p className="text-muted">No reviews yet.</p>
             ) : (
               <div className="space-y-6">
                 {product.reviews?.map((review) => (
-                  <div key={review.id} className="border-b pb-4">
+                  <div key={review.id} className="border-b border-navy/10 pb-4">
                     <div className="flex justify-between">
-                      <span className="font-medium">{review.user_name}</span>
-                      <span className="text-yellow-500">
-                        {"⭐".repeat(review.rating)}
+                      <span className="font-medium text-navy">{review.user_name}</span>
+                      <span className="text-gold">
+                        {"★".repeat(review.rating)}
                       </span>
                     </div>
 
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-muted mt-1">
                       {new Date(review.created_at).toLocaleDateString()}
                     </p>
                   </div>
@@ -289,10 +298,10 @@ const handleAddToCart = async () => {
 
           {/* RELATED PRODUCTS */}
           {related.length > 0 && (
-            <div className="mt-16">
-              <h2 className="text-xl font-semibold mb-8">Related Products</h2>
+            <div className="mt-14">
+              <h2 className="text-d4 text-navy mb-8">You might also like</h2>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(14px,1.7vw,24px)]">
                 {related.map((item) => (
                   <ProductCard key={item.id} product={item} />
                 ))}
@@ -302,23 +311,41 @@ const handleAddToCart = async () => {
         </div>
       </div>
 
+      {/* ================= MOBILE STICKY BUY BAR ================= */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[90] bg-ivory/95 backdrop-blur-md border-t border-navy/10 px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] flex gap-3 shadow-[0_-14px_22px_-18px_rgba(15,33,64,.45)]">
+        <button
+          onClick={handleAddToCart}
+          disabled={addToCartLoading || product.stock <= 0}
+          className="flex-1 bg-navy text-ivory py-3 rounded-full font-semibold text-sm disabled:opacity-40"
+        >
+          {addToCartLoading ? "Adding..." : product.stock <= 0 ? "Out of Stock" : "Add to Gift Box"}
+        </button>
+        <button
+          onClick={handleBuyNow}
+          disabled={buyNowLoading || product.stock <= 0}
+          className="flex-1 bg-peach text-navy py-3 rounded-full font-semibold text-sm disabled:opacity-40"
+        >
+          {buyNowLoading ? "Processing..." : "Buy Now"}
+        </button>
+      </div>
+
       {/* ================= LIGHTBOX ================= */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 bg-black z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-navy z-[160] flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-white text-3xl"
+              className="absolute top-4 right-4 text-ivory text-3xl"
             >
               ✕
             </button>
 
-            <div className="absolute top-4 left-4 text-white bg-white/10 px-4 py-1 rounded-full text-sm">
+            <div className="absolute top-4 left-4 text-ivory bg-ivory/10 px-4 py-1 rounded-full text-sm">
               {currentIndex + 1} / {product.images.length}
             </div>
 
@@ -340,14 +367,14 @@ const handleAddToCart = async () => {
 
             <button
               onClick={prevImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-ivory text-4xl"
             >
               ‹
             </button>
 
             <button
               onClick={nextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-ivory text-4xl"
             >
               ›
             </button>
