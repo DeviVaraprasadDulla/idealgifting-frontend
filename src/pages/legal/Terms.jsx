@@ -8,7 +8,7 @@ const Terms = () => {
       label: "Introduction",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Introduction
           </h2>
           <p>
@@ -32,7 +32,7 @@ const Terms = () => {
       label: "Acceptance of Terms",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Acceptance of Terms
           </h2>
           <p>
@@ -49,7 +49,7 @@ const Terms = () => {
       label: "Products and Customization",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Products and Customization
           </h2>
           <p>
@@ -79,7 +79,7 @@ const Terms = () => {
       label: "Customization Approval",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Customization Approval
           </h2>
 
@@ -103,7 +103,7 @@ const Terms = () => {
       label: "Pricing and Payments",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Pricing and Payments
           </h2>
 
@@ -123,7 +123,7 @@ const Terms = () => {
       label: "Delivery and Shipping",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Delivery and Shipping
           </h2>
 
@@ -145,7 +145,7 @@ const Terms = () => {
       label: "Returns and Refunds",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Returns and Refunds
           </h2>
 
@@ -172,7 +172,7 @@ const Terms = () => {
       label: "Limitation of Liability",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Limitation of Liability
           </h2>
 

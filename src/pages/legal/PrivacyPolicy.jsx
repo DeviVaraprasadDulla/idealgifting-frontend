@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
       label: "Introduction",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Introduction
           </h2>
 
@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
       label: "Information We Collect",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Information We Collect
           </h2>
 
@@ -67,7 +67,7 @@ const PrivacyPolicy = () => {
       label: "How We Use Your Data",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             How We Use Your Data
           </h2>
 
@@ -93,7 +93,7 @@ const PrivacyPolicy = () => {
       label: "Payment Information",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Payment Information
           </h2>
 
@@ -117,7 +117,7 @@ const PrivacyPolicy = () => {
       label: "Data Protection and Security",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Data Protection and Security
           </h2>
 
@@ -140,7 +140,7 @@ const PrivacyPolicy = () => {
       label: "Sharing of Information",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Sharing of Information
           </h2>
 
@@ -163,7 +163,7 @@ const PrivacyPolicy = () => {
       label: "Cookies and Website Usage",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Cookies and Website Usage
           </h2>
 
@@ -184,7 +184,7 @@ const PrivacyPolicy = () => {
       label: "Customer Rights",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Customer Rights
           </h2>
 
@@ -202,7 +202,7 @@ const PrivacyPolicy = () => {
       label: "Policy Updates",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Changes to This Privacy Policy
           </h2>
 

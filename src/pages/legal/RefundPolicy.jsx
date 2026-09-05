@@ -8,7 +8,7 @@ const RefundPolicy = () => {
       label: "Introduction",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Introduction
           </h2>
 
@@ -33,7 +33,7 @@ const RefundPolicy = () => {
       label: "Order Cancellation Policy",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Order Cancellation Policy
           </h2>
 
@@ -72,7 +72,7 @@ const RefundPolicy = () => {
       label: "Refund Policy",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Refund Policy
           </h2>
 
@@ -103,7 +103,7 @@ const RefundPolicy = () => {
       label: "Damaged or Incorrect Products",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Damaged or Incorrect Products
           </h2>
 
@@ -136,7 +136,7 @@ const RefundPolicy = () => {
       label: "Non-Refundable Situations",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Non-Refundable Situations
           </h2>
 
@@ -169,7 +169,7 @@ const RefundPolicy = () => {
       label: "Policy Updates",
       content: (
         <>
-          <h2 className="text-xl font-semibold text-[#0B1C2D] mb-3">
+          <h2 className="text-xl font-semibold text-navy mb-3">
             Policy Updates
           </h2>
 
