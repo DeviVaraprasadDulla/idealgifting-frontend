@@ -152,6 +152,20 @@ const Navbar = ({ topOffset = 0 }) => {
                 </Link>
               </div>
             ))}
+
+            <Link
+              to="/how"
+              className="px-[15px] py-[10px] rounded-full text-[0.9rem] text-navy hover:bg-navy/[0.04] transition-colors"
+            >
+              How It Works
+            </Link>
+
+            <Link
+              to="/corporate"
+              className="px-[15px] py-[10px] rounded-full text-[0.9rem] text-navy hover:bg-navy/[0.04] transition-colors"
+            >
+              Corporate Gifting
+            </Link>
           </div>
 
           {/* Right controls (desktop + mobile) */}
@@ -324,6 +338,32 @@ const Navbar = ({ topOffset = 0 }) => {
             )}
 
             <hr className="my-6 border-navy/10" />
+
+            <div className="space-y-1 mb-4">
+              <Link
+                to="/how"
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 font-medium text-navy/80"
+              >
+                How It Works
+              </Link>
+              <Link
+                to="/corporate"
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 font-medium text-navy/80"
+              >
+                Corporate Gifting
+              </Link>
+              <Link
+                to="/faq"
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 font-medium text-navy/80"
+              >
+                FAQ
+              </Link>
+            </div>
+
+            <hr className="my-2 border-navy/10" />
 
             {/* Categories Accordion */}
             <div className="space-y-1">

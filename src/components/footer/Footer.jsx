@@ -90,6 +90,36 @@ function Footer() {
 
             <li>
               <Link
+                to="/how"
+                onClick={() => handleNavigate("/how")}
+                className="hover:text-accent transition"
+              >
+                How It Works
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/faq"
+                onClick={() => handleNavigate("/faq")}
+                className="hover:text-accent transition"
+              >
+                FAQ
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/corporate"
+                onClick={() => handleNavigate("/corporate")}
+                className="hover:text-accent transition"
+              >
+                Corporate Gifting
+              </Link>
+            </li>
+
+            <li>
+              <Link
                 to="/privacy-policy"
                 onClick={() => handleNavigate("/privacy-policy")}
                 className="hover:text-accent transition"

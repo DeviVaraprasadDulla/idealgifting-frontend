@@ -25,6 +25,10 @@ import RefundPolicy from "./pages/legal/RefundPolicy";
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import Terms from "./pages/legal/Terms";
 import Contact from "./pages/legal/Contact";
+import Faq from "./pages/Faq";
+import HowItWorks from "./pages/HowItWorks";
+import Corporate from "./pages/Corporate";
+import NotFound from "./pages/NotFound";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
@@ -111,14 +115,17 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/how" element={<HowItWorks />} />
+        <Route path="/corporate" element={<Corporate />} />
+
+        {/* 404 (inside layout so nav/footer still render) */}
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       {/* Auth without layout */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-
-      {/* 404 */}
-      <Route path="*" element={<Home />} />
     </Routes>
     </>
   );
