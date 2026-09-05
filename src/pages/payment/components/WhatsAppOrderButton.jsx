@@ -93,7 +93,7 @@ Thank you.
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
       onClick={handleWhatsAppOrder}
-      className="mt-6 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold shadow-md transition"
+      className="mt-6 w-full bg-[#25D366] hover:bg-[#1fb959] text-white py-3.5 rounded-full font-semibold shadow-card transition-colors"
     >
       Confirm Order via WhatsApp
     </motion.button>

@@ -7,6 +7,7 @@ const ConfettiEffect = () => {
       particleCount: 200,
       spread: 120,
       origin: { y: 0.6 },
+      colors: ["#0F2140", "#F3C39C", "#E5A170", "#C79A5B", "#FCF8F1"],
     });
   }, []);
 

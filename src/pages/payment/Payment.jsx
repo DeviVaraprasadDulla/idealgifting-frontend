@@ -115,7 +115,7 @@ const loadRazorpay = () => {
       },
 
       theme: {
-        color: "#db1e57",
+        color: "#0F2140",
       },
     };
 
@@ -135,48 +135,48 @@ const loadRazorpay = () => {
   if (!order) return null;
   if (verifyingPayment) {
   return (
-    <div className="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center">
-      <div className="w-16 h-16 border-4 border-gray-200 border-t-[#db1e57] rounded-full animate-spin" />
+    <div className="fixed inset-0 bg-ivory z-[9999] flex flex-col items-center justify-center">
+      <div className="w-16 h-16 border-4 border-navy/15 border-t-peach-deep rounded-full animate-spin" />
 
-      <h2 className="mt-5 text-xl font-semibold">
+      <h2 className="mt-5 text-xl font-display font-semibold text-navy">
         Processing Payment...
       </h2>
 
-      <p className="text-gray-500 mt-2">
+      <p className="text-muted mt-2">
         Please wait. Do not refresh or go back.
       </p>
     </div>
   );
 }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-4xl bg-white rounded-3xl shadow-xl p-6 md:p-10 grid md:grid-cols-2 gap-8"
+        className="w-full max-w-4xl bg-paper rounded-rxl shadow-lift p-6 md:p-10 grid md:grid-cols-2 gap-8"
       >
         {/* LEFT SIDE */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+          <h2 className="text-d4 text-navy mb-6">
             Select Payment Method
           </h2>
 
-          {/* PHONEPE OPTION */}
+          {/* RAZORPAY OPTION */}
           <div
             onClick={() => setSelectedMethod("razorpay")}
-            className={`border-2 rounded-2xl p-4 mb-4 cursor-pointer transition ${
+            className={`border-2 rounded-rm p-4 mb-4 cursor-pointer transition-colors ${
               selectedMethod === "razorpay"
-                ? "border-purple-600 bg-purple-50"
-                : "border-gray-200"
+                ? "border-navy bg-world-soft"
+                : "border-navy/10"
             }`}
           >
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-gray-800">
+                <h3 className="font-display font-semibold text-navy">
                   Razorpay
                 </h3>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   UPI, Cards, Net Banking & Wallets
                 </p>
               </div>
@@ -185,6 +185,7 @@ const loadRazorpay = () => {
                 type="radio"
                 checked={selectedMethod === "razorpay"}
                 readOnly
+                className="accent-navy"
               />
             </div>
           </div>
@@ -192,16 +193,16 @@ const loadRazorpay = () => {
           {/* WHATSAPP OPTION */}
           <div
             onClick={() => setSelectedMethod("whatsapp")}
-            className={`border-2 rounded-2xl p-4 cursor-pointer transition ${
+            className={`border-2 rounded-rm p-4 cursor-pointer transition-colors ${
               selectedMethod === "whatsapp"
-                ? "border-green-500 bg-green-50"
-                : "border-gray-200"
+                ? "border-leaf bg-leaf/10"
+                : "border-navy/10"
             }`}
           >
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-gray-800">WhatsApp Order</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-display font-semibold text-navy">WhatsApp Order</h3>
+                <p className="text-sm text-muted">
                   Send order details directly to seller
                 </p>
               </div>
@@ -210,6 +211,7 @@ const loadRazorpay = () => {
                 type="radio"
                 checked={selectedMethod === "whatsapp"}
                 readOnly
+                className="accent-leaf"
               />
             </div>
           </div>
@@ -219,7 +221,7 @@ const loadRazorpay = () => {
             <button
               onClick={handleRazorpayPayment}
               disabled={loading}
-              className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-semibold transition"
+              className="mt-6 w-full bg-navy text-ivory py-3.5 rounded-full font-semibold shadow-card hover:-translate-y-0.5 hover:shadow-elevated transition-all disabled:opacity-50"
             >
               {loading ? "Processing..." : "Pay Securely"}
             </button>

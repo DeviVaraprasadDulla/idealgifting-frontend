@@ -25,39 +25,40 @@ const PaymentSuccess = () => {
   if (!order) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <ConfettiEffect />
 
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white rounded-3xl shadow-2xl p-10 max-w-xl w-full text-center"
+        className="bg-paper rounded-rxl shadow-lift p-10 max-w-xl w-full text-center"
       >
         <div className="text-5xl mb-4">🎉</div>
 
-        <h2 className="text-3xl font-bold text-green-600 mb-4">
-          Payment Successful
+        <h2 className="text-d3 text-navy mb-4">
+          The gift story has begun!
         </h2>
 
-        <p className="text-gray-600 mb-6">
+        <p className="text-muted mb-6">
           Your order has been confirmed successfully.
         </p>
 
-        <div className="text-left bg-gray-50 p-4 rounded-xl mb-6">
+        <div className="text-left bg-world-soft p-5 rounded-rm mb-6 space-y-1.5 text-navy">
           <p>
-            <strong>Order Number:</strong> {order.order_number}
+            <strong className="font-display">Order Number:</strong> {order.order_number}
           </p>
           <p>
-            <strong>Total:</strong> ₹{order.total_amount}
+            <strong className="font-display">Total:</strong>{" "}
+            <span className="font-num">₹{order.total_amount}</span>
           </p>
           <p>
-            <strong>Status:</strong> {order.order_status}
+            <strong className="font-display">Status:</strong> {order.order_status}
           </p>
         </div>
 
         <button
           onClick={() => navigate("/orders")}
-          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold"
+          className="bg-navy text-ivory px-6 py-3.5 rounded-full font-semibold shadow-card hover:-translate-y-0.5 hover:shadow-elevated transition-all"
         >
           Go to My Orders
         </button>
