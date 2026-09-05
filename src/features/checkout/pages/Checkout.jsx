@@ -240,19 +240,19 @@ const handleSaveAddress = async () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 grid lg:grid-cols-3 gap-8">
+    <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] py-[clamp(32px,5vw,56px)] grid lg:grid-cols-3 gap-8">
       {/* ================= LEFT SIDE ================= */}
       <div className="lg:col-span-2 space-y-8">
                 {/* ================= REVIEW ORDER ================= */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
-          <h3 className="text-lg md:text-xl font-semibold text-[#0B1C2D] mb-4">
+        <div className="bg-paper rounded-rl shadow-card p-6">
+          <h3 className="font-display text-lg md:text-xl font-semibold text-navy mb-4">
             Review Your Order
           </h3>
 
           {cartItems.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between border-b py-4"
+              className="flex items-center justify-between border-b border-navy/10 py-4"
             >
               <div className="flex items-center gap-4">
                 {/* Product Image */}
@@ -262,26 +262,26 @@ const handleSaveAddress = async () => {
                     "https://via.placeholder.com/80x80?text=No+Image"
                   }
                   alt={item.product_name}
-                  className="w-16 h-16 rounded-lg object-cover border"
+                  className="w-16 h-16 rounded-rm object-cover bg-world-soft"
                 />
 
                 {/* Product Details */}
                 <div>
-                  <p className="font-medium text-[#0B1C2D]">
+                  <p className="font-medium text-navy">
                     {item.product_name}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     Qty: {item.quantity}
                   </p>
 
-                  <p className="text-sm text-[#db1e57] font-semibold">
+                  <p className="text-sm text-peach-deep font-num font-semibold">
                     ₹{item.product_price}
                   </p>
                 </div>
               </div>
 
-              <p className="font-semibold text-[#0B1C2D]">
+              <p className="font-num font-semibold text-navy">
                 ₹{(item.product_price * item.quantity).toFixed(2)}
               </p>
             </div>
@@ -289,13 +289,13 @@ const handleSaveAddress = async () => {
         </div>
         {/* Shipping Section */}
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#0B1C2D] mb-6">
+          <h2 className="text-d3 text-navy mb-6">
             Shipping Address
           </h2>
 
-          <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
+          <div className="bg-paper rounded-rl shadow-card p-6 space-y-4">
             {addresses.length === 0 && (
-              <div className="bg-orange-50 border border-orange-200 text-orange-700 p-4 rounded-xl">
+              <div className="bg-sun/10 border border-sun/30 text-[#8a5a10] p-4 rounded-rm text-sm">
                 No shipping address found. Please add an address to continue checkout.
               </div>
             )}
@@ -303,10 +303,10 @@ const handleSaveAddress = async () => {
             {addresses.map((addr) => (
               <div
                 key={addr.id}
-                className={`border rounded-xl p-4 transition ${
+                className={`border rounded-rm p-4 transition ${
                   selectedAddress === addr.id
-                    ? "border-[#0B1C2D] bg-blue-50"
-                    : "hover:border-gray-400"
+                    ? "border-navy bg-world-soft"
+                    : "border-navy/10 hover:border-navy/30"
                 }`}
               >
                 <div
@@ -315,20 +315,20 @@ const handleSaveAddress = async () => {
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <p className="font-semibold text-[#0B1C2D] text-lg">
+                          <p className="font-display font-semibold text-navy text-lg">
                             {addr.first_name} {addr.last_name}
                           </p>
 
-                          <p className="text-gray-600 mt-1 leading-relaxed">
+                          <p className="text-muted mt-1 leading-relaxed">
                             {addr.address_line1}
                             {addr.address_line2 && `, ${addr.address_line2}`}
                           </p>
 
-                          <p className="text-gray-600">
+                          <p className="text-muted">
                             {addr.city}, {addr.state} - {addr.zip_code}
                           </p>
 
-                          <p className="text-gray-600">
+                          <p className="text-muted">
                             Phone: {addr.phone}
                           </p>
                         </div>
@@ -338,14 +338,14 @@ const handleSaveAddress = async () => {
             <div className="flex gap-4 mt-3">
               <button
                 onClick={() => handleEditAddress(addr)}
-                className="text-sm text-blue-600 hover:underline"
+                className="text-sm text-sky font-medium hover:underline"
               >
                 Edit
               </button>
 
               <button
                 onClick={() => handleRemoveAddress(addr.id)}
-                className="text-sm text-red-500 hover:underline"
+                className="text-sm text-burgundy font-medium hover:underline"
               >
                 Remove
               </button>
@@ -356,7 +356,7 @@ const handleSaveAddress = async () => {
             <button
               type="button"
               onClick={() => setShowForm(!showForm)}
-              className="w-full border-2 border-dashed border-[#C6A14A] text-[#0B1C2D] py-3 rounded-xl hover:bg-[#FFF8E7] transition"
+              className="w-full border-2 border-dashed border-gold text-navy py-3 rounded-rm hover:bg-cream/40 transition font-medium"
             >
               {showForm ? "Cancel" : "+ Add New Address"}
             </button>
@@ -376,7 +376,7 @@ const handleSaveAddress = async () => {
                       onChange={(e) =>
                         setForm({ ...form, first_name: e.target.value })
                       }
-                      className="border rounded-lg px-3 py-2"
+                      className="border border-navy/15 rounded-rs px-3 py-2.5 bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
                     />
                     <input
                       placeholder="Last Name"
@@ -384,7 +384,7 @@ const handleSaveAddress = async () => {
                       onChange={(e) =>
                         setForm({ ...form, last_name: e.target.value })
                       }
-                      className="border rounded-lg px-3 py-2"
+                      className="border border-navy/15 rounded-rs px-3 py-2.5 bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
                     />
                   </div>
 
@@ -398,7 +398,7 @@ const handleSaveAddress = async () => {
                           phone: e.target.value.replace(/\D/g, ""),
                         })
                       }
-                      className="border rounded-lg px-3 py-2 w-full"
+                      className="border border-navy/15 rounded-rs px-3 py-2.5 w-full bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
                     />
 
                   <input
@@ -420,7 +420,7 @@ const handleSaveAddress = async () => {
                             city: e.target.value.replace(/[^A-Za-z ]/g, ""),
                           })
                         }
-                        className="border rounded-lg px-3 py-2"
+                        className="border border-navy/15 rounded-rs px-3 py-2.5 bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
                       />
                         <select
                           value={form.state}
@@ -430,7 +430,7 @@ const handleSaveAddress = async () => {
                               state: e.target.value,
                             })
                           }
-                          className="border rounded-lg px-3 py-2"
+                          className="border border-navy/15 rounded-rs px-3 py-2.5 bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
                         >
                           <option value="">Select State</option>
 
@@ -481,13 +481,13 @@ const handleSaveAddress = async () => {
                                 }));
                               }
                             }}
-                            className={`border rounded-lg px-3 py-2 ${
-                              errors.zip_code ? "border-red-500" : ""
+                            className={`border rounded-rs px-3 py-2.5 bg-paper focus:outline-none focus:ring-4 focus:ring-peach/30 transition ${
+                              errors.zip_code ? "border-burgundy" : "border-navy/15 focus:border-peach-deep"
                             }`}
                           />
 
                           {errors.zip_code && (
-                            <p className="text-red-500 text-xs mt-1">
+                            <p className="text-burgundy text-xs mt-1">
                               {errors.zip_code}
                             </p>
                           )}
@@ -496,7 +496,7 @@ const handleSaveAddress = async () => {
                   <button
                     onClick={handleSaveAddress}
                     disabled={savingAddress}
-                    className="bg-[#0B1C2D] text-white px-6 py-2 rounded-xl"
+                    className="bg-navy text-ivory px-6 py-3 rounded-full font-semibold shadow-card hover:-translate-y-0.5 hover:shadow-elevated transition-all disabled:opacity-50"
                   >
                     {savingAddress
                         ? "Saving..."
@@ -514,20 +514,20 @@ const handleSaveAddress = async () => {
       </div>
 
       {/* ================= RIGHT SUMMARY ================= */}
-      <div className="lg:sticky lg:top-24 h-fit">
-        <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
-          <h3 className="text-lg md:text-xl font-semibold text-[#0B1C2D]">
+      <div className="lg:sticky lg:top-[112px] h-fit">
+        <div className="bg-paper rounded-rl shadow-card p-6 space-y-4">
+          <h3 className="font-display text-lg md:text-xl font-semibold text-navy">
             Order Summary
           </h3>
 
-          <div className="flex justify-between text-gray-600">
+          <div className="flex justify-between text-muted">
             <span>Items Total</span>
-            <span>₹{total.toFixed(2)}</span>
+            <span className="font-num">₹{total.toFixed(2)}</span>
           </div>
 
-          <hr />
+          <hr className="border-navy/10" />
 
-          <div className="flex justify-between font-bold text-lg text-[#0B1C2D]">
+          <div className="flex justify-between font-num font-extrabold text-lg text-navy">
             <span>Order Total</span>
             <span>₹{total.toFixed(2)}</span>
           </div>
@@ -535,13 +535,13 @@ const handleSaveAddress = async () => {
           {/* Address Validation Messages */}
 
           {addresses.length === 0 && (
-            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-xl text-sm">
+            <div className="bg-sun/10 border border-sun/30 text-[#8a5a10] p-3 rounded-rm text-sm">
               Please add a shipping address to continue.
             </div>
           )}
 
           {addresses.length > 0 && !selectedAddress && (
-            <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-xl text-sm">
+            <div className="bg-sky/10 border border-sky/30 text-[#2c5876] p-3 rounded-rm text-sm">
               Please select a shipping address to place your order.
             </div>
           )}
@@ -549,10 +549,10 @@ const handleSaveAddress = async () => {
           <button
             disabled={!selectedAddress || loading}
             onClick={handlePlaceOrder}
-            className={`w-full py-3 rounded-xl text-white transition ${
+            className={`w-full py-3.5 rounded-full font-semibold transition-all ${
               !selectedAddress || loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#0B1C2D] hover:bg-[#152B42]"
+                ? "bg-navy/30 text-ivory cursor-not-allowed"
+                : "bg-peach text-navy shadow-card hover:-translate-y-0.5 hover:shadow-elevated"
             }`}
           >
             {loading ? "Creating Order..." : "Place Order"}
