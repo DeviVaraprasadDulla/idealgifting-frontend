@@ -48,7 +48,7 @@ const OrderTracking = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-gray-500">
+      <div className="min-h-screen flex justify-center items-center text-muted font-display">
         Loading tracking...
       </div>
     );
@@ -57,30 +57,30 @@ const OrderTracking = () => {
   if (!order) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <div className="min-h-screen py-10 px-4 sm:px-6">
+      <div className="max-w-wrap-narrow mx-auto space-y-8">
         {/* ================= HEADER CARD ================= */}
-        <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#0B1C2D]">
+        <div className="bg-paper rounded-rxl shadow-lift p-6 sm:p-8 space-y-3">
+          <h2 className="text-d3 text-navy">
             Order Tracking
           </h2>
 
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
             <div>
-              <p className="text-sm text-gray-500">Order Reference</p>
-              <p className="font-semibold">{order.order_token}</p>
+              <p className="text-sm text-muted">Order Reference</p>
+              <p className="font-semibold text-navy">{order.order_token}</p>
             </div>
 
             <div>
-              <p className="text-sm text-gray-500">Current Status</p>
-              <span className="inline-block px-4 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700">
+              <p className="text-sm text-muted">Current Status</p>
+              <span className="inline-block px-4 py-1 text-sm font-semibold rounded-full bg-leaf/15 text-[#1f5245]">
                 {order.order_status.replaceAll("_", " ")}
               </span>
             </div>
 
             <div>
-              <p className="text-sm text-gray-500">Tracking ID</p>
-              <p className="font-semibold">
+              <p className="text-sm text-muted">Tracking ID</p>
+              <p className="font-semibold text-navy">
                 {order.tracking_id || "Not assigned yet"}
               </p>
             </div>
@@ -88,12 +88,12 @@ const OrderTracking = () => {
         </div>
 
         {/* ================= PROGRESS TRACKER ================= */}
-        <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8">
+        <div className="bg-paper rounded-rxl shadow-lift p-6 sm:p-8">
           {/* Progress Bar */}
           <div className="relative mb-10">
-            <div className="h-2 bg-gray-200 rounded-full" />
+            <div className="h-1.5 bg-navy/10 rounded-full" />
             <div
-              className="absolute top-0 left-0 h-2 bg-green-500 rounded-full transition-all duration-500"
+              className="absolute top-0 left-0 h-1.5 bg-peach rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -109,13 +109,13 @@ const OrderTracking = () => {
                 <div key={step} className="space-y-2">
                   {/* Circle */}
                   <div
-                    className={`mx-auto w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-all duration-300
+                    className={`mx-auto w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold font-num transition-all duration-300
                       ${
                         isCompleted
-                          ? "bg-green-500 text-white"
-                          : "bg-gray-200 text-gray-600"
+                          ? "bg-navy text-ivory"
+                          : "bg-navy/10 text-navy/50"
                       }
-                      ${isCurrent ? "ring-4 ring-green-200" : ""}
+                      ${isCurrent ? "ring-4 ring-peach/40" : ""}
                     `}
                   >
                     {index + 1}
@@ -124,7 +124,7 @@ const OrderTracking = () => {
                   {/* Label */}
                   <p
                     className={`text-xs sm:text-sm font-medium ${
-                      isCompleted ? "text-green-600" : "text-gray-500"
+                      isCompleted ? "text-navy" : "text-muted"
                     }`}
                   >
                     {step.replaceAll("_", " ")}
@@ -132,7 +132,7 @@ const OrderTracking = () => {
 
                   {/* Timestamp */}
                   {timestamp && (
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-muted/70">
                       {new Date(timestamp).toLocaleString()}
                     </p>
                   )}
@@ -146,7 +146,7 @@ const OrderTracking = () => {
         <div className="text-center">
           <button
             onClick={() => navigate("/orders")}
-            className="px-8 py-3 bg-[#0B1C2D] text-white rounded-xl hover:bg-[#081521] transition"
+            className="px-8 py-3.5 bg-navy text-ivory rounded-full font-semibold shadow-card hover:-translate-y-0.5 hover:shadow-elevated transition-all"
           >
             Back to Orders
           </button>

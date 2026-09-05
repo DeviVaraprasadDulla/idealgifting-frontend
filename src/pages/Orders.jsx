@@ -45,48 +45,48 @@ const Orders = () => {
   const getStatusStyle = (status) => {
     switch (status) {
       case "CONFIRMED":
-        return "bg-blue-100 text-blue-600";
+        return "bg-sky/15 text-[#2c5876]";
       case "PACKED":
-        return "bg-yellow-100 text-yellow-600";
+        return "bg-sun/20 text-[#8a5a10]";
       case "SHIPPED":
-        return "bg-purple-100 text-purple-600";
+        return "bg-lavender/20 text-[#4a3a78]";
       case "DELIVERED":
-        return "bg-green-100 text-green-600";
+        return "bg-leaf/15 text-[#1f5245]";
       case "CANCELLED":
-        return "bg-red-100 text-red-600";
+        return "bg-burgundy/10 text-burgundy";
       default:
-        return "bg-gray-100 text-gray-600";
+        return "bg-navy/10 text-navy";
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
+      <div className="min-h-screen flex justify-center items-center text-navy font-display">
         Loading orders...
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12 min-h-screen">
-      <h2 className="text-3xl font-bold text-[#0B1C2D] mb-10">My Orders</h2>
+    <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] py-12 min-h-screen">
+      <h2 className="text-d3 text-navy mb-10">My Orders</h2>
 
       {/* ================= EMPTY STATE ================= */}
       {orders.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center mt-20">
           <div className="text-6xl mb-6">📦</div>
 
-          <h3 className="text-2xl font-semibold text-[#0B1C2D] mb-3">
+          <h3 className="text-d4 text-navy mb-3">
             No Orders Yet
           </h3>
 
-          <p className="text-gray-500 mb-8 max-w-md">
+          <p className="text-muted mb-8 max-w-md">
             Looks like you haven't placed any orders.
           </p>
 
           <button
             onClick={() => navigate("/products")}
-            className="bg-[#0B1C2D] hover:bg-[#142f47] text-white px-8 py-3 rounded-2xl transition font-medium"
+            className="bg-navy hover:-translate-y-0.5 text-ivory px-8 py-3.5 rounded-full transition-all font-semibold shadow-card"
           >
             Start Shopping
           </button>
@@ -96,15 +96,15 @@ const Orders = () => {
           {orders.map((order) => (
             <div
               key={order.order_token}
-              className="bg-white shadow-md rounded-2xl p-6 border"
+              className="bg-paper shadow-card rounded-rl p-6 border border-navy/10"
             >
               {/* HEADER */}
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     Order ID: #{order.order_token}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     {new Date(order.created_at).toLocaleDateString()}
                   </p>
                 </div>
@@ -123,28 +123,28 @@ const Orders = () => {
                 {order.items.map((item, index) => (
                   <div
                     key={index}
-                    className="flex justify-between border-b py-4"
+                    className="flex justify-between border-b border-navy/10 py-4"
                   >
                     <div className="flex items-center space-x-4">
                       {item.image && (
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="w-16 h-16 object-cover rounded-xl"
+                          className="w-16 h-16 object-cover rounded-rm bg-world-soft"
                         />
                       )}
 
                       <div>
-                        <p className="font-medium text-[#0B1C2D]">
+                        <p className="font-medium text-navy">
                           {item.name}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted">
                           Qty: {item.quantity}
                         </p>
                       </div>
                     </div>
 
-                    <p className="font-semibold text-[#0B1C2D]">
+                    <p className="font-num font-semibold text-navy">
                       ₹{item.price * item.quantity}
                     </p>
                   </div>
@@ -153,7 +153,7 @@ const Orders = () => {
 
               {/* FOOTER */}
               <div className="flex justify-between items-center mt-6">
-                <p className="font-bold text-lg text-[#0B1C2D]">
+                <p className="font-num font-extrabold text-lg text-navy">
                   ₹{order.total_amount}
                 </p>
 
@@ -162,7 +162,7 @@ const Orders = () => {
                     onClick={() =>
                       navigate(`/orders/track/${order.order_token}`)
                     }
-                    className="text-sm text-purple-600 hover:underline"
+                    className="text-sm text-sky font-medium hover:underline"
                   >
                     Track Order
                   </button>
@@ -172,7 +172,7 @@ const Orders = () => {
                   ) && (
                     <button
                       onClick={() => setCancelToken(order.order_token)}
-                      className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition px-4 py-2 rounded-xl text-sm"
+                      className="border border-burgundy text-burgundy hover:bg-burgundy hover:text-ivory transition-colors px-4 py-2 rounded-full text-sm font-medium"
                     >
                       Cancel Order
                     </button>
@@ -186,11 +186,11 @@ const Orders = () => {
 
       {/* ================= CANCEL MODAL ================= */}
       {cancelToken && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl">
-            <h3 className="text-lg font-semibold mb-3">Cancel this order?</h3>
+        <div className="fixed inset-0 bg-navy/40 flex items-center justify-center z-[140]">
+          <div className="bg-paper rounded-rl p-6 w-96 shadow-lift">
+            <h3 className="font-display font-semibold text-lg text-navy mb-3">Cancel this order?</h3>
 
-            <p className="text-sm text-gray-600 mb-6">
+            <p className="text-sm text-muted mb-6">
               This action cannot be undone. Refund will be processed
               automatically.
             </p>
@@ -198,7 +198,7 @@ const Orders = () => {
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setCancelToken(null)}
-                className="px-4 py-2 text-gray-600"
+                className="px-4 py-2 text-navy/70 font-medium"
               >
                 No
               </button>
@@ -206,7 +206,7 @@ const Orders = () => {
               <button
                 onClick={confirmCancel}
                 disabled={cancelLoading}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                className="px-5 py-2.5 bg-burgundy text-ivory rounded-full font-medium disabled:opacity-60"
               >
                 {cancelLoading ? "Cancelling..." : "Yes, Cancel"}
               </button>
