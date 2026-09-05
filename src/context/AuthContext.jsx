@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         const userData = await getCurrentUser();
-        setUser(null);
+        setUser(userData);
       } catch (error) {
         console.log("Token invalid. Logging out.");
         localStorage.removeItem("access");
