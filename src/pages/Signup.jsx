@@ -58,25 +58,25 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-lightbg px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8"
+        className="bg-paper w-full max-w-md rounded-rxl shadow-lift p-6 sm:p-8"
       >
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Ideal Gifting" className="h-10" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-center mb-6">
+        <h2 className="text-d4 text-navy text-center mb-6">
           Create Your Account
         </h2>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg mb-4 border border-red-100">
+          <div className="bg-burgundy/5 text-burgundy text-sm p-3 rounded-rs mb-4 border border-burgundy/20">
             {error}
           </div>
         )}
@@ -88,7 +88,7 @@ const Signup = () => {
             name="email"
             placeholder="Email Address"
             autoComplete="email"
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
             onChange={handleChange}
             required
           />
@@ -99,7 +99,7 @@ const Signup = () => {
               name="password"
               placeholder="Password"
               autoComplete="new-password"
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
               onChange={handleChange}
               required
             />
@@ -107,7 +107,7 @@ const Signup = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-sm text-gray-500"
+              className="absolute right-3 top-3 text-sm text-muted"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
@@ -118,7 +118,7 @@ const Signup = () => {
             name="confirm_password"
             placeholder="Confirm Password"
             autoComplete="new-password"
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
             onChange={handleChange}
             required
           />
@@ -126,15 +126,15 @@ const Signup = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white p-3 rounded-lg font-medium hover:bg-accent transition disabled:opacity-70"
+            className="w-full bg-navy hover:-translate-y-0.5 text-ivory p-3 rounded-full font-semibold shadow-card hover:shadow-elevated transition-all disabled:opacity-70"
           >
             {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="text-center text-sm mt-6 text-gray-500">
+        <p className="text-center text-sm mt-6 text-muted">
           Already have an account?{" "}
-          <Link to="/login" className="text-accent font-medium">
+          <Link to="/login" className="text-peach-deep font-semibold hover:underline">
             Login
           </Link>
         </p>

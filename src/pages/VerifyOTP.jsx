@@ -40,10 +40,10 @@ const VerifyOTP = () => {
 
   // Password strength checker
   const getPasswordStrength = (password) => {
-    if (password.length < 6) return { label: "Weak", color: "bg-red-500" };
+    if (password.length < 6) return { label: "Weak", color: "bg-burgundy" };
     if (password.length < 10)
-      return { label: "Medium", color: "bg-yellow-500" };
-    return { label: "Strong", color: "bg-green-500" };
+      return { label: "Medium", color: "bg-sun" };
+    return { label: "Strong", color: "bg-leaf" };
   };
 
   const strength = getPasswordStrength(form.password);
@@ -95,19 +95,19 @@ const VerifyOTP = () => {
 
   return (
     <div className="py-16 px-4">
-      <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg">
+      <div className="max-w-md mx-auto bg-paper p-8 rounded-rxl shadow-lift">
         <div className="flex justify-center mb-6">
           <img src={logoHorizontal} alt="Ideal Gifting" className="h-10" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-center mb-2">Verify OTP</h2>
+        <h2 className="text-d4 text-navy text-center mb-2">Verify OTP</h2>
 
-        <p className="text-sm text-gray-500 text-center mb-6 break-all">
-          OTP sent to <span className="font-medium">{email}</span>
+        <p className="text-sm text-muted text-center mb-6 break-all">
+          OTP sent to <span className="font-medium text-navy">{email}</span>
         </p>
 
         {error && (
-          <div className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+          <div className="mb-4 text-sm text-burgundy bg-burgundy/5 p-3 rounded-rs border border-burgundy/20">
             {error}
           </div>
         )}
@@ -115,13 +115,13 @@ const VerifyOTP = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* OTP */}
           <div>
-            <label className="block text-sm font-medium mb-1">OTP Code</label>
+            <label className="block text-sm font-medium text-navy mb-1">OTP Code</label>
             <input
               type="text"
               placeholder="Enter OTP"
               autoComplete="one-time-code"
               inputMode="numeric"
-              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+              className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
               value={form.otp}
               onChange={(e) => setForm({ ...form, otp: e.target.value })}
               required
@@ -129,13 +129,13 @@ const VerifyOTP = () => {
 
             <div className="text-sm mt-2">
               {timer > 0 ? (
-                <span className="text-gray-500">Resend OTP in {timer}s</span>
+                <span className="text-muted">Resend OTP in {timer}s</span>
               ) : (
                 <button
                   type="button"
                   onClick={handleResendOTP}
                   disabled={resending}
-                  className="text-primary font-medium hover:underline"
+                  className="text-peach-deep font-medium hover:underline"
                 >
                   {resending ? "Resending..." : "Resend OTP"}
                 </button>
@@ -145,7 +145,7 @@ const VerifyOTP = () => {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-navy mb-1">
               New Password
             </label>
 
@@ -154,7 +154,7 @@ const VerifyOTP = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter new password"
                 autoComplete="new-password"
-                className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 required
@@ -163,7 +163,7 @@ const VerifyOTP = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-sm text-gray-500"
+                className="absolute right-3 top-3 text-sm text-muted"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
@@ -172,9 +172,9 @@ const VerifyOTP = () => {
             {/* Password Strength */}
             {form.password && (
               <div className="mt-2">
-                <div className="h-2 w-full bg-gray-200 rounded-full">
+                <div className="h-1.5 w-full bg-navy/10 rounded-full">
                   <div
-                    className={`h-2 rounded-full ${strength.color}`}
+                    className={`h-1.5 rounded-full ${strength.color}`}
                     style={{
                       width:
                         strength.label === "Weak"
@@ -185,7 +185,7 @@ const VerifyOTP = () => {
                     }}
                   />
                 </div>
-                <p className="text-xs mt-1 text-gray-600">
+                <p className="text-xs mt-1 text-muted">
                   Strength: {strength.label}
                 </p>
               </div>
@@ -194,14 +194,14 @@ const VerifyOTP = () => {
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-navy mb-1">
               Confirm Password
             </label>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Re-enter new password"
               autoComplete="new-password"
-              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+              className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
               value={form.confirmPassword}
               onChange={(e) =>
                 setForm({ ...form, confirmPassword: e.target.value })
@@ -213,7 +213,7 @@ const VerifyOTP = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white p-3 rounded-lg font-medium hover:opacity-90 transition disabled:opacity-60"
+            className="w-full bg-navy hover:-translate-y-0.5 text-ivory p-3 rounded-full font-semibold shadow-card hover:shadow-elevated transition-all disabled:opacity-60"
           >
             {loading ? "Processing..." : "Reset Password"}
           </button>

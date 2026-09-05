@@ -24,24 +24,24 @@ const ForgotPassword = () => {
 
   return (
     <div className="py-16 px-4">
-      <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg">
+      <div className="max-w-md mx-auto bg-paper p-8 rounded-rxl shadow-lift">
         <div className="flex justify-center mb-6">
           <img src={logoHorizontal} alt="Ideal Gifting" className="h-10" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-center mb-6">
+        <h2 className="text-d4 text-navy text-center mb-6">
           Reset Password
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-navy mb-1">
               Registered Email
             </label>
             <input
               type="email"
               placeholder="Enter your registered email"
-              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-primary"
+              className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -51,7 +51,7 @@ const ForgotPassword = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white p-3 rounded-lg"
+            className="w-full bg-navy hover:-translate-y-0.5 text-ivory p-3 rounded-full font-semibold shadow-card hover:shadow-elevated transition-all disabled:opacity-60"
           >
             {loading ? "Sending..." : "Send OTP"}
           </button>

@@ -65,14 +65,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-lightbg px-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 sm:p-8 md:p-10">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-paper w-full max-w-md rounded-rxl shadow-lift p-6 sm:p-8 md:p-10">
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <img src={logoHorizontal} alt="Ideal Gifting" className="h-10" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-center mb-6">
+        <h2 className="text-d4 text-navy text-center mb-6">
           Welcome Back
         </h2>
 
@@ -80,7 +80,7 @@ const Login = () => {
           <input
             type="text"
             placeholder="Username or Email"
-            className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
             onChange={(e) => setForm({ ...form, username: e.target.value })}
             required
           />
@@ -88,7 +88,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
-            className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border border-navy/15 p-3 rounded-rs bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
@@ -96,7 +96,7 @@ const Login = () => {
           <div className="text-right">
             <Link
               to="/forgot-password"
-              className="text-sm text-primary hover:underline"
+              className="text-sm text-peach-deep font-medium hover:underline"
             >
               Forgot password?
             </Link>
@@ -104,7 +104,7 @@ const Login = () => {
 
           {/* Error Message */}
           {errorMessage && (
-            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+            <div className="bg-burgundy/5 text-burgundy text-sm p-3 rounded-rs border border-burgundy/20">
               {errorMessage}
             </div>
           )}
@@ -112,13 +112,13 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary/90 text-white p-3 rounded-lg transition disabled:opacity-50"
+            className="w-full bg-navy hover:-translate-y-0.5 text-ivory p-3 rounded-full font-semibold shadow-card hover:shadow-elevated transition-all disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <div className="my-6 text-center text-gray-400">OR</div>
+        <div className="my-6 text-center text-muted text-sm">OR</div>
 
         <div className="flex justify-center w-full">
           <GoogleLogin
@@ -127,11 +127,11 @@ const Login = () => {
           />
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-muted mt-6">
           Don’t have an account?{" "}
           <Link
             to="/signup"
-            className="text-primary font-medium hover:underline"
+            className="text-peach-deep font-semibold hover:underline"
           >
             Sign up
           </Link>
