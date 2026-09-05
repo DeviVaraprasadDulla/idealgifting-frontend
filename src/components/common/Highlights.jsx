@@ -8,13 +8,13 @@ const items = [
 ];
 const Highlights = () => {
   return (
-    <div className="mt-6 md:mt-8">
+    <div className="mt-8 md:mt-10">
       {/* CONTAINER ALIGNMENT */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
+      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] relative">
         {/* STRIP 1 */}
-        <div className="rotate-[-1deg] bg-orange-500 py-1.5 rounded-md overflow-hidden">
+        <div className="rotate-[-1deg] bg-navy py-2 rounded-rs overflow-hidden">
           <motion.div
-            className="flex gap-10 text-white text-sm font-medium whitespace-nowrap"
+            className="flex gap-10 text-cream text-sm font-medium whitespace-nowrap"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
               repeat: Infinity,
@@ -29,9 +29,9 @@ const Highlights = () => {
         </div>
 
         {/* STRIP 2 */}
-        <div className="rotate-[1deg] bg-gray-900 py-1.5 rounded-md mt-2 overflow-hidden">
+        <div className="rotate-[1deg] bg-peach-deep py-2 rounded-rs mt-2 overflow-hidden">
           <motion.div
-            className="flex gap-10 text-white text-sm font-medium whitespace-nowrap"
+            className="flex gap-10 text-navy text-sm font-semibold whitespace-nowrap"
             animate={{ x: ["-50%", "0%"] }}
             transition={{
               repeat: Infinity,

@@ -55,18 +55,18 @@ const HeroSection = () => {
   const banner = banners[current];
 
   return (
-    <section className="bg-lightbg relative">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-6 md:pt-8">
+    <section className="relative">
+      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] pt-8 md:pt-10">
         <div
           className="
             relative
             aspect-[16/9]
             sm:aspect-[16/7]
             lg:aspect-[16/5]
-            rounded-2xl
-            md:rounded-3xl
+            rounded-rl
+            md:rounded-rxl
             overflow-hidden
-            shadow-xl
+            shadow-lift
             group
           "
         >
@@ -102,20 +102,20 @@ const HeroSection = () => {
 
           {/* Offer Badge */}
           {banner.offer_text && (
-            <div className="absolute top-4 left-4 md:top-6 md:left-6 bg-accent text-white px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-semibold shadow-lg z-20">
-              ⭐ {banner.offer_text}
+            <div className="absolute top-4 left-4 md:top-6 md:left-6 bg-peach text-navy px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-semibold shadow-card z-20">
+              ✦ {banner.offer_text}
             </div>
           )}
 
           {/* Hero Content */}
           <div className="absolute inset-0 flex items-center z-10">
-            <div className="px-6 md:px-16 max-w-md md:max-w-lg text-white">
+            <div className="px-6 md:px-16 max-w-md md:max-w-lg text-ivory">
               {/* Greeting */}
               <motion.h2
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-sm sm:text-base md:text-xl font-medium"
+                className="text-sm sm:text-base md:text-xl font-medium font-sans text-cream"
               >
                 Hi {username} 👋
               </motion.h2>
@@ -126,7 +126,7 @@ const HeroSection = () => {
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
-                className="text-2xl sm:text-3xl md:text-5xl font-bold leading-snug mt-2"
+                className="font-display font-semibold text-2xl sm:text-3xl md:text-5xl leading-[1.08] tracking-headline mt-2"
               >
                 {banner.title}
               </motion.h1>
@@ -134,9 +134,9 @@ const HeroSection = () => {
               {/* Shop Now Button */}
               <motion.button
                 onClick={() => navigate("/products")}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-4 md:mt-6 bg-white text-primary px-5 md:px-6 py-2.5 md:py-3 rounded-full font-semibold shadow-lg text-sm md:text-base"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="mt-4 md:mt-6 bg-peach text-navy px-5 md:px-6 py-2.5 md:py-3 rounded-full font-semibold shadow-card text-sm md:text-base"
               >
                 Shop Now
               </motion.button>
@@ -146,23 +146,23 @@ const HeroSection = () => {
           {/* Arrows */}
           <button
             onClick={prevSlide}
-            className="hidden md:block absolute left-6 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur p-3 rounded-full shadow opacity-0 group-hover:opacity-100 transition z-20"
+            className="hidden md:block absolute left-6 top-1/2 -translate-y-1/2 bg-ivory/85 backdrop-blur p-3 rounded-full shadow-card opacity-0 group-hover:opacity-100 transition z-20 text-navy"
           >
             ❮
           </button>
 
           <button
             onClick={nextSlide}
-            className="hidden md:block absolute right-6 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur p-3 rounded-full shadow opacity-0 group-hover:opacity-100 transition z-20"
+            className="hidden md:block absolute right-6 top-1/2 -translate-y-1/2 bg-ivory/85 backdrop-blur p-3 rounded-full shadow-card opacity-0 group-hover:opacity-100 transition z-20 text-navy"
           >
             ❯
           </button>
 
           {/* Progress Bar */}
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-white/30">
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-ivory/30">
             <motion.div
               key={progressKey}
-              className="h-full bg-accent"
+              className="h-full bg-peach"
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
               transition={{

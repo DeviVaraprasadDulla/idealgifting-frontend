@@ -7,11 +7,11 @@ import Highlights from "../components/common/Highlights";
 function Home() {
   return (
     <>
-      <HomeCategories />
       <HeroSection />
+      <HomeCategories />
       <FeaturedProducts />
-      <Highlights />
       <AboutSection />
+      <Highlights />
     </>
   );
 }

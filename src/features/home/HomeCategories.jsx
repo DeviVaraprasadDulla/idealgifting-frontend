@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "../../api/axios";
@@ -6,34 +6,25 @@ import axios from "../../api/axios";
 const HomeCategories = () => {
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     try {
       const res = await axios.get("categories/?is_trending=true");
       setCategories(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Category load error:", err);
     }
-  };
+  }, []);
 
-if (!Array.isArray(categories) || categories.length === 0) return null;
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
+
+  if (!Array.isArray(categories) || categories.length === 0) return null;
 
   return (
-    <section className="bg-white py-3">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div
-          className="
-            flex 
-            gap-6 
-            overflow-x-auto 
-            scrollbar-hide 
-            md:justify-center 
-            items-start
-          "
-        >
+    <section className="bg-paper py-6">
+      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
+        <div className="flex gap-6 overflow-x-auto scrollbar-hide md:justify-center items-start">
           {categories.map((cat, index) => (
             <motion.div
               key={cat.id}
@@ -46,9 +37,8 @@ if (!Array.isArray(categories) || categories.length === 0) return null;
                 to={`/products?category_slug=${cat.slug}`}
                 className="flex flex-col items-center group"
               >
-                {/* Compact Circle */}
-                <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] rounded-full p-[2px] bg-gradient-to-br from-[#D4AF37] to-[#b8962e] shadow-sm group-hover:shadow-md transition">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-gray-100">
+                <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] rounded-full p-[3px] bg-gradient-to-br from-peach to-peach-deep shadow-card group-hover:shadow-elevated transition-shadow">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-world-soft">
                     <img
                       src={cat.image}
                       alt={cat.name}
@@ -57,26 +47,23 @@ if (!Array.isArray(categories) || categories.length === 0) return null;
                   </div>
                 </div>
 
-                {/* Title */}
-                <p className="mt-2 text-xs md:text-sm font-medium text-center whitespace-nowrap">
+                <p className="mt-2 text-xs md:text-sm font-medium text-center whitespace-nowrap text-navy">
                   {cat.name}
                 </p>
 
-                {/* Product Count */}
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[11px] text-muted">
                   {cat.product_count} items
                 </p>
               </Link>
             </motion.div>
           ))}
 
-          {/* View All */}
           <div className="flex-shrink-0">
             <Link to="/products" className="flex flex-col items-center">
-              <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] rounded-full bg-[#0B1C2D] flex items-center justify-center shadow-md hover:scale-105 transition">
-                <span className="text-white text-lg">→</span>
+              <div className="w-[72px] h-[72px] md:w-[84px] md:h-[84px] rounded-full bg-navy flex items-center justify-center shadow-card hover:scale-105 transition-transform">
+                <span className="text-ivory text-lg">→</span>
               </div>
-              <p className="mt-2 text-xs md:text-sm font-medium whitespace-nowrap">
+              <p className="mt-2 text-xs md:text-sm font-medium whitespace-nowrap text-navy">
                 View All
               </p>
             </Link>

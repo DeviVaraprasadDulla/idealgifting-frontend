@@ -15,19 +15,19 @@ function AboutSection() {
   ];
 
   return (
-    <section className="relative py-20 bg-[#F8F9FB] overflow-hidden">
+    <section className="relative py-[clamp(56px,7.5vw,110px)] overflow-hidden">
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-accent/10 rounded-full blur-3xl opacity-60" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#0F172A]/10 rounded-full blur-3xl opacity-60" />
+      <div className="absolute top-0 right-0 w-72 h-72 bg-peach/15 rounded-full blur-3xl opacity-60" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-navy/10 rounded-full blur-3xl opacity-60" />
 
-      <div className="relative max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-16 items-center">
+      <div className="relative max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] grid md:grid-cols-2 gap-16 items-center">
         {/* IMAGE SIDE */}
         <motion.div
           initial={{ opacity: 0, x: -60 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative rounded-[32px] overflow-hidden shadow-xl"
+          className="relative rounded-rl overflow-hidden shadow-lift"
         >
           <motion.img
             src={aboutImage}
@@ -44,7 +44,7 @@ function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             viewport={{ once: true }}
-            className="absolute bottom-6 left-6 bg-white shadow-lg px-4 py-2 rounded-xl text-sm font-medium"
+            className="absolute bottom-6 left-6 bg-paper shadow-elevated px-4 py-2 rounded-rm text-sm font-medium text-navy"
           >
             💛 Crafted With Emotion & Care
           </motion.div>
@@ -61,7 +61,7 @@ function AboutSection() {
               transition: { staggerChildren: 0.15 },
             },
           }}
-          className="bg-white p-8 rounded-3xl shadow-sm"
+          className="bg-paper p-8 rounded-rl shadow-card"
         >
           {/* Logo */}
           <motion.img
@@ -76,18 +76,18 @@ function AboutSection() {
 
           {/* Heading */}
           <motion.h2
-            className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 leading-tight"
+            className="text-d3 text-navy mb-5"
             variants={{
               hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0 },
             }}
           >
-            A Gift Is Not Just Given — It Is Felt.
+            A Gift Is Not Just Given — <em className="text-peach-deep not-italic">It Is Felt.</em>
           </motion.h2>
 
           {/* Story */}
           <motion.p
-            className="text-gray-600 leading-relaxed mb-4"
+            className="text-muted leading-relaxed mb-4"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 },
@@ -100,7 +100,7 @@ function AboutSection() {
           </motion.p>
 
           <motion.p
-            className="text-gray-600 leading-relaxed mb-6"
+            className="text-muted leading-relaxed mb-6"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 },
@@ -118,13 +118,15 @@ function AboutSection() {
               visible: { opacity: 1, y: 0 },
             }}
           >
-            <h3 className="font-semibold text-gray-900 mb-3">Our Services</h3>
+            <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-gold mb-3">
+              Our Services
+            </h3>
 
             <div className="flex flex-wrap gap-2">
               {services.map((service, index) => (
                 <span
                   key={index}
-                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs"
+                  className="bg-world-soft text-world-deep px-3 py-1.5 rounded-full text-xs font-medium"
                 >
                   {service}
                 </span>
@@ -132,7 +134,7 @@ function AboutSection() {
             </div>
           </motion.div>
 
-          {/* CTA (CONVERSION OPTIMIZED) */}
+          {/* CTA */}
           <motion.div
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -141,10 +143,10 @@ function AboutSection() {
           >
             <Link
               to="/products"
-              className="inline-block bg-[#0F172A] text-white px-7 py-3 rounded-2xl font-medium 
-                         hover:scale-105 hover:shadow-lg transition duration-300"
+              className="inline-flex items-center gap-2 bg-navy text-ivory px-7 py-3.5 rounded-full font-semibold shadow-card
+                         hover:-translate-y-0.5 hover:shadow-elevated transition-all duration-300"
             >
-              Explore Our Collection →
+              Explore Our Collection <span aria-hidden="true">→</span>
             </Link>
           </motion.div>
         </motion.div>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCart } from "../../../context/CartContext";
 import toast from "react-hot-toast";
-import { ShoppingCart, Eye } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -16,22 +16,24 @@ function ProductCard({ product }) {
 
     toast.custom((t) => (
       <div
-        className={`bg-white shadow-xl rounded-xl p-3 flex items-center gap-3 w-72 transition ${
+        className={`bg-paper shadow-elevated rounded-rm p-3 flex items-center gap-3 w-72 transition ${
           t.visible ? "animate-enter" : "animate-leave"
         }`}
       >
         <img
           src={product.images?.[0]?.image}
           alt={product.name}
-          className="w-12 h-12 object-cover rounded-lg"
+          className="w-12 h-12 object-cover rounded-rs"
         />
         <div className="flex-1">
-          <p className="text-sm font-medium line-clamp-1">{product.name}</p>
-          <p className="text-xs text-green-600">Added to cart ✓</p>
+          <p className="text-sm font-display font-semibold text-navy line-clamp-1">
+            {product.name}
+          </p>
+          <p className="text-xs text-leaf">Added to your gift box ✓</p>
         </div>
         <Link
           to="/cart"
-          className="text-xs bg-black text-white px-3 py-1.5 rounded-lg"
+          className="text-xs bg-navy text-ivory px-3 py-1.5 rounded-full"
         >
           View
         </Link>
@@ -41,64 +43,60 @@ function ProductCard({ product }) {
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ type: "spring", stiffness: 200 }}
-      className="bg-white rounded-2xl shadow-sm hover:shadow-lg overflow-hidden transition"
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 220, damping: 22 }}
+      className="bg-paper rounded-rl shadow-card hover:shadow-lift overflow-hidden transition-shadow"
     >
-        <Link to={`/products/${product.slug}`} className="block relative">
+      <Link to={`/products/${product.slug}`} className="block relative">
         {/* IMAGE */}
-        <div className="relative aspect-square overflow-hidden">
+        <div className="relative aspect-square overflow-hidden bg-world-soft">
           <img
             src={product.images?.[0]?.image}
             alt={product.name}
-            className="w-full h-full object-cover transition duration-500 hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
 
-          {/* Discount Badge */}
           {hasDiscount && (
-            <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-3 py-1 rounded-md font-medium shadow">
-              {product.discount_percentage}% OFF
+            <div className="absolute top-3 left-3 bg-navy text-ivory text-[0.66rem] font-bold uppercase tracking-[0.1em] px-[10px] py-[5px] rounded-full">
+              {product.discount_percentage}% off
             </div>
           )}
 
-          {/* Floating Add to Cart */}
           <button
             onClick={handleAddToCart}
-            className="absolute bottom-3 right-3 bg-black text-white 
-                       p-2.5 rounded-full shadow-md 
-                       hover:scale-110 transition"
+            aria-label="Add to gift box"
+            className="absolute bottom-3 right-3 bg-navy text-ivory p-3 rounded-full shadow-card hover:scale-110 transition-transform"
           >
-            <ShoppingCart size={18} />
+            <ShoppingBag size={17} />
           </button>
         </div>
 
         {/* CONTENT */}
         <div className="p-4 space-y-2">
-          <h3 className="font-semibold text-[16px] leading-snug line-clamp-2 min-h-[42px]">
+          <h3 className="font-display font-semibold text-[1.05rem] leading-snug line-clamp-2 min-h-[2.6em] text-navy">
             {product.name}
           </h3>
 
-          <div className="flex items-center gap-1 text-sm text-gray-500">
-            ⭐ {product.average_rating || 0} ({product.rating_count || 0})
+          <div className="flex items-center gap-1 text-sm text-muted">
+            <span className="text-gold">★</span> {product.average_rating || 0}{" "}
+            ({product.rating_count || 0})
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-green-600 font-bold text-[17px]">
+            <span className="font-num font-extrabold text-[1.15rem] text-navy">
               ₹{product.discounted_price}
             </span>
 
             {hasDiscount && (
-              <span className="text-gray-400 line-through text-sm">
+              <span className="font-num text-muted line-through text-sm">
                 ₹{product.price}
               </span>
             )}
           </div>
 
-          {/* View Button */}
-          <div className="pt-2">
-            <span className="inline-flex items-center gap-1 text-sm text-gray-700 hover:text-black transition font-medium">
-              <Eye size={16} />
-              View
+          <div className="pt-1">
+            <span className="inline-flex items-center gap-1 text-sm text-peach-deep font-semibold">
+              Personalise it <span aria-hidden="true">→</span>
             </span>
           </div>
         </div>
