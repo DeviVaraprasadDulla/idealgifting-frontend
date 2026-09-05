@@ -108,8 +108,9 @@ const loadRazorpay = () => {
             replace: true,
           });
         } catch (error) {
+          setVerifyingPayment(false);
           alert(
-            "Payment verification failed"
+            "Payment verification failed. Please try again or contact us if the amount was deducted."
           );
         }
       },
