@@ -1,11 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { SlidersHorizontal, X } from "lucide-react";
 
 import { getProducts, getFilters } from "../../../api/productApi";
 import { getMegaMenu } from "../../../api/categoryApi";
 
 import ProductCard from "../components/ProductCard";
+import PageBanner from "../../../components/common/PageBanner";
+
+const FilterGroups = ({ filters, selectedFilters, toggleFilter, compact }) => (
+  <>
+    {filters.length === 0 && (
+      <p className="text-sm text-muted">No filters available for this category.</p>
+    )}
+
+    {filters.map((filter) => (
+      <div key={filter.filter_id} className={compact ? "mb-6" : "mb-5"}>
+        <h4 className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold mb-3">
+          {filter.filter_name}
+        </h4>
+
+        <div className="flex flex-wrap gap-2">
+          {filter.options.map((opt) => {
+            const on = selectedFilters.includes(opt.id);
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => toggleFilter(opt.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  on
+                    ? "bg-navy text-ivory shadow-none"
+                    : "bg-paper text-navy shadow-[inset_0_0_0_1.3px_rgba(15,33,64,.13)] hover:shadow-[inset_0_0_0_1.3px_rgba(15,33,64,.4)] hover:-translate-y-0.5"
+                }`}
+              >
+                {opt.value}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+  </>
+);
 
 function ProductListPage() {
   const { categorySlug } = useParams();
@@ -18,18 +56,18 @@ function ProductListPage() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // ================= LOAD CATEGORIES =================
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const data = await getMegaMenu();
-        setCategories(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    loadCategories();
+  const loadCategories = useCallback(async () => {
+    try {
+      const data = await getMegaMenu();
+      setCategories(data);
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
 
   // ================= LOAD CATEGORY FILTERS =================
   useEffect(() => {
@@ -95,19 +133,33 @@ function ProductListPage() {
     setSelectedFilters([]);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 py-6">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* ================= DESKTOP SIDEBAR ================= */}
-        <div className="hidden lg:block lg:col-span-1 space-y-6 sticky top-28 h-fit">
-          {/* Categories */}
-          <div className="bg-white p-5 rounded-2xl shadow-sm">
-            <h3 className="font-semibold mb-4">Categories</h3>
+  const activeCategory = categories.find((c) => c.slug === categorySlug);
 
-            <div className="space-y-2">
+  return (
+    <div>
+      <PageBanner
+        eyebrow="Shop"
+        title={activeCategory ? activeCategory.name : "All Gifts"}
+        lede="Browse the full catalogue and narrow it down by category and filters."
+      />
+
+      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] py-[clamp(32px,5vw,56px)] grid grid-cols-1 lg:grid-cols-4 gap-[clamp(20px,3vw,40px)]">
+        {/* ================= DESKTOP SIDEBAR ================= */}
+        <div className="hidden lg:block lg:col-span-1 space-y-6 sticky top-[112px] h-fit">
+          {/* Categories */}
+          <div className="bg-paper p-5 rounded-rl shadow-card">
+            <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold mb-4">
+              Categories
+            </h3>
+
+            <div className="space-y-1">
               <Link
                 to="/products"
-                className={!categorySlug ? "block font-bold" : "block"}
+                className={`block px-3 py-2 rounded-rs text-sm transition-colors ${
+                  !categorySlug
+                    ? "bg-navy text-ivory font-semibold"
+                    : "text-navy hover:bg-navy/[0.05]"
+                }`}
               >
                 All Products
               </Link>
@@ -116,9 +168,11 @@ function ProductListPage() {
                 <Link
                   key={cat.id}
                   to={`/products/category/${cat.slug}`}
-                  className={
-                    categorySlug === cat.slug ? "block font-bold" : "block"
-                  }
+                  className={`block px-3 py-2 rounded-rs text-sm transition-colors ${
+                    categorySlug === cat.slug
+                      ? "bg-navy text-ivory font-semibold"
+                      : "text-navy hover:bg-navy/[0.05]"
+                  }`}
                 >
                   {cat.name}
                 </Link>
@@ -128,44 +182,26 @@ function ProductListPage() {
 
           {/* Filters */}
           {categorySlug && (
-            <div className="bg-white p-5 rounded-2xl shadow-sm">
+            <div className="bg-paper p-5 rounded-rl shadow-card">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold">Filters</h3>
+                <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold">
+                  Filters
+                </h3>
                 {selectedFilters.length > 0 && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-red-500"
+                    className="text-sm text-burgundy font-medium"
                   >
                     Clear
                   </button>
                 )}
               </div>
 
-              {filters.length === 0 && (
-                <p className="text-sm text-gray-400">No filters available</p>
-              )}
-
-              {filters.map((filter) => (
-                <div key={filter.filter_id} className="mb-4">
-                  <h4 className="text-sm font-medium mb-2">
-                    {filter.filter_name}
-                  </h4>
-
-                  {filter.options.map((opt) => (
-                    <label
-                      key={opt.id}
-                      className="flex items-center gap-2 text-sm mb-1 cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters.includes(opt.id)}
-                        onChange={() => toggleFilter(opt.id)}
-                      />
-                      {opt.value}
-                    </label>
-                  ))}
-                </div>
-              ))}
+              <FilterGroups
+                filters={filters}
+                selectedFilters={selectedFilters}
+                toggleFilter={toggleFilter}
+              />
             </div>
           )}
         </div>
@@ -174,35 +210,41 @@ function ProductListPage() {
         <div className="lg:col-span-3">
           {/* Mobile Filter Button */}
           {categorySlug && (
-            <div className="lg:hidden mb-4">
+            <div className="lg:hidden mb-5">
               <button
                 onClick={() => setMobileFilterOpen(true)}
-                className="bg-black text-white px-4 py-2 rounded-lg w-full"
+                className="inline-flex items-center gap-2 bg-navy text-ivory px-5 py-3 rounded-full w-full justify-center font-medium shadow-card"
               >
-                Filters ({selectedFilters.length})
+                <SlidersHorizontal size={16} />
+                Filters {selectedFilters.length > 0 && `(${selectedFilters.length})`}
               </button>
             </div>
           )}
 
-          <h1 className="text-2xl font-bold mb-6 capitalize">
-            {categorySlug || "All Products"}
-          </h1>
+          <p className="text-sm text-muted mb-6">
+            {loading ? "Loading..." : `${products.length} gifts match your selection`}
+          </p>
 
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-[clamp(14px,1.7vw,24px)]">
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-xl h-72 animate-pulse"
+                  className="bg-paper rounded-rl h-72 animate-pulse"
                 />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <p>No products found.</p>
+            <div className="text-center py-20 bg-paper rounded-rl shadow-card">
+              <p className="text-navy font-display font-semibold text-lg mb-2">
+                Nothing matches that combination — yet.
+              </p>
+              <p className="text-muted text-sm">Try clearing a filter or two.</p>
+            </div>
           ) : (
             <motion.div
               layout
-              className="grid grid-cols-2 md:grid-cols-3 gap-6"
+              className="grid grid-cols-2 md:grid-cols-3 gap-[clamp(14px,1.7vw,24px)]"
             >
               {products.map((product) => (
                 <motion.div
@@ -223,66 +265,49 @@ function ProductListPage() {
       <AnimatePresence>
         {mobileFilterOpen && (
           <>
-            {/* Overlay */}
             <motion.div
-              className="fixed inset-0 bg-black bg-opacity-40 z-40"
+              className="fixed inset-0 bg-navy/40 z-[140]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileFilterOpen(false)}
             />
 
-            {/* Drawer */}
             <motion.div
-              className="fixed right-0 top-0 h-full w-3/4 bg-white z-50 p-5 overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-[85%] max-w-sm bg-ivory z-[150] p-6 overflow-y-auto"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "tween" }}
+              transition={{ type: "tween", duration: 0.3 }}
             >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg">Filters</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-display font-semibold text-lg text-navy">Filters</h3>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
-                  className="text-red-500"
+                  className="w-9 h-9 rounded-full grid place-items-center hover:bg-navy/5"
                 >
-                  Close
+                  <X size={20} className="text-navy" />
                 </button>
               </div>
 
-              {filters.map((filter) => (
-                <div key={filter.filter_id} className="mb-4">
-                  <h4 className="text-sm font-medium mb-2">
-                    {filter.filter_name}
-                  </h4>
+              <FilterGroups
+                filters={filters}
+                selectedFilters={selectedFilters}
+                toggleFilter={toggleFilter}
+                compact
+              />
 
-                  {filter.options.map((opt) => (
-                    <label
-                      key={opt.id}
-                      className="flex items-center gap-2 text-sm mb-1"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters.includes(opt.id)}
-                        onChange={() => toggleFilter(opt.id)}
-                      />
-                      {opt.value}
-                    </label>
-                  ))}
-                </div>
-              ))}
-
-              <div className="mt-6 space-y-2">
+              <div className="mt-6 space-y-3">
                 <button
                   onClick={() => setMobileFilterOpen(false)}
-                  className="bg-black text-white w-full py-2 rounded-lg"
+                  className="bg-navy text-ivory w-full py-3 rounded-full font-semibold shadow-card"
                 >
                   Apply Filters
                 </button>
 
                 <button
                   onClick={clearFilters}
-                  className="border w-full py-2 rounded-lg"
+                  className="w-full py-3 rounded-full font-medium text-navy shadow-[inset_0_0_0_1.4px_rgba(15,33,64,.2)]"
                 >
                   Clear All
                 </button>
