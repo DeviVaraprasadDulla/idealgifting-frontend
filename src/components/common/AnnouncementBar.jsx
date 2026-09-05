@@ -54,19 +54,21 @@ const AnnouncementBar = ({ onHeightChange }) => {
           exit={{ y: -50, opacity: 0 }}
           transition={{ duration: 0.35 }}
           className="
-            fixed top-0 left-0 right-0 z-50
-            bg-gradient-to-r from-[#e0564a] to-[#cf4a3b]
-            text-white text-sm font-medium
+            fixed top-0 left-0 right-0 z-[56]
+            bg-navy text-cream text-[0.72rem] font-medium uppercase tracking-[0.16em]
             flex items-center justify-center
-            shadow-md py-2
+            py-[9px]
           "
         >
-          <div className="max-w-7xl w-full px-4 flex items-center justify-center relative">
-            <span className="text-center truncate">{announcement.message}</span>
+          <div className="max-w-wrap w-full px-[clamp(20px,5vw,64px)] flex items-center justify-center relative">
+            <span className="text-center truncate">
+              <span className="text-peach mr-2">✦</span>
+              {announcement.message}
+            </span>
 
             <button
               onClick={() => setDismissed(true)}
-              className="absolute right-4 text-white/80 hover:text-white text-lg"
+              className="absolute right-0 text-cream/70 hover:text-cream text-sm normal-case tracking-normal"
             >
               ✕
             </button>

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Font Faces */
+/* Font Faces (legacy Poppins - retained until fully migrated off) */
 @font-face {
   font-family: "Poppins";
   src: url("./assets/fonts/Poppins-Regular.ttf") format("truetype");
@@ -25,4 +25,125 @@
   font-family: "Poppins";
   src: url("./assets/fonts/Poppins-Bold.ttf") format("truetype");
   font-weight: 700;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   IDEAL GIFTING — design tokens (client reference)
+   Navy ground, peach ribbon, champagne rule. Each occasion/category
+   carries its own colour "world", applied through [data-world] so a
+   section can change mood without breaking the shared system.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --w: #e5a170;
+  --w-soft: #fbebdc;
+  --w-deep: #8a4b22;
+}
+
+[data-world="love"] {
+  --w: #c7566b;
+  --w-soft: #f8d8e0;
+  --w-deep: #7c2b3e;
+}
+[data-world="birthday"] {
+  --w: #ef7a5c;
+  --w-soft: #fbdbcc;
+  --w-deep: #9c3a20;
+}
+[data-world="baby"] {
+  --w: #6fa8d0;
+  --w-soft: #d9eaf7;
+  --w-deep: #2c5876;
+}
+[data-world="kids"] {
+  --w: #9b86cf;
+  --w-soft: #e4dcf6;
+  --w-deep: #4a3a78;
+}
+[data-world="family"] {
+  --w: #d08a4e;
+  --w-soft: #f5e3c9;
+  --w-deep: #7a4718;
+}
+[data-world="friendship"] {
+  --w: #d9a93c;
+  --w-soft: #f7e7bd;
+  --w-deep: #7a5a10;
+}
+[data-world="wedding"] {
+  --w: #c79a5b;
+  --w-soft: #f2e5cb;
+  --w-deep: #6e5121;
+}
+[data-world="corporate"] {
+  --w: #37568c;
+  --w-soft: #d7e0f0;
+  --w-deep: #152f5e;
+}
+[data-world="festive"] {
+  --w: #b8434f;
+  --w-soft: #f5d2d0;
+  --w-deep: #6e1e28;
+}
+[data-world="achievement"] {
+  --w: #4e8e7c;
+  --w-soft: #d1e9df;
+  --w-deep: #1f5245;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    @apply font-sans text-navy;
+    background:
+      radial-gradient(
+        52% 38% at 92% 4%,
+        rgba(243, 195, 156, 0.16) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        46% 34% at 4% 30%,
+        rgba(183, 166, 221, 0.14) 0%,
+        transparent 58%
+      ),
+      radial-gradient(
+        50% 40% at 14% 96%,
+        rgba(155, 198, 229, 0.15) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        44% 34% at 98% 74%,
+        rgba(235, 174, 180, 0.14) 0%,
+        transparent 58%
+      ),
+      #fcf8f1;
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-semibold tracking-headline;
+    line-height: 1.08;
+  }
+
+  ::selection {
+    @apply bg-peach text-navy;
+  }
 }

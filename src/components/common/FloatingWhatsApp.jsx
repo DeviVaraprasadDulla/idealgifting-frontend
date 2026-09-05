@@ -11,7 +11,7 @@ const FloatingWhatsApp = () => {
   )}`;
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex items-center">
+    <div className="fixed bottom-4 right-4 md:bottom-[22px] md:right-[22px] z-[100] flex items-center">
       {/* Tooltip */}
       <motion.div
         initial={{ opacity: 0, x: 8 }}
@@ -22,28 +22,24 @@ const FloatingWhatsApp = () => {
         transition={{ duration: 0.2 }}
         className="relative mr-3 hidden md:block"
       >
-        <div className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg">
+        <div className="bg-navy text-cream text-xs px-3 py-1.5 rounded-lg">
           Chat with us
         </div>
-        <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45"></div>
+        <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-navy rotate-45"></div>
       </motion.div>
 
-      {/* Button (NO SHADOW / NO GLOW) */}
+      {/* Pulsing ring (matches client reference, respects prefers-reduced-motion) */}
+      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-55 motion-safe:animate-ping [animation-duration:2.6s]" />
+
       <motion.a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         onHoverStart={() => setHovered(true)}
         onHoverEnd={() => setHovered(false)}
-        whileHover={{ scale: 1.08 }}
+        whileHover={{ scale: 1.05, y: -3 }}
         whileTap={{ scale: 0.95 }}
-        animate={{ y: [0, -4, 0] }}
-        transition={{
-          repeat: Infinity,
-          duration: 3,
-          ease: "easeInOut",
-        }}
-        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-500 flex items-center justify-center hover:bg-green-600 transition"
+        className="relative w-[52px] h-[52px] md:w-[58px] md:h-[58px] rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_10px_24px_-8px_rgba(37,211,102,.6),0_2px_6px_rgba(15,33,64,.2)] hover:shadow-[0_14px_30px_-8px_rgba(37,211,102,.7),0_3px_8px_rgba(15,33,64,.25)] transition-shadow"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
