@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PageBanner from "../components/common/PageBanner";
 import Button from "../components/ui/Button";
+import { submitCorporateEnquiry } from "../api/enquiryApi";
 
 const WHATSAPP_NUMBER = "916305540600";
 
@@ -22,14 +23,33 @@ const Corporate = () => {
     needBy: "",
     idea: "",
   });
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus("sending");
 
+    try {
+      await submitCorporateEnquiry({
+        name: form.name,
+        company: form.company,
+        contact: form.contact,
+        quantity: form.quantity,
+        occasion: form.occasion,
+        budget: form.budget,
+        need_by: form.needBy,
+        message: form.idea,
+      });
+      setStatus("sent");
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+
+  const openWhatsAppFallback = () => {
     const message = `*New corporate gifting enquiry from idealgifting.in*
 
 Name: ${form.name}
@@ -43,9 +63,11 @@ Needed by: ${form.needBy || "Not specified"}
 Idea:
 ${form.idea}`;
 
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-    setSent(true);
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
@@ -70,12 +92,12 @@ ${form.idea}`;
         </div>
 
         <div className="bg-paper rounded-rl shadow-card p-6 sm:p-10 max-w-2xl mx-auto">
-          {sent ? (
+          {status === "sent" ? (
             <div className="text-center py-6">
               <div className="text-4xl mb-3">🤝</div>
               <h3 className="text-d4 text-navy mb-2">Thanks, {form.name || "there"} — we're on it.</h3>
               <p className="text-muted">
-                We opened WhatsApp with your enquiry pre-filled. Send it across and we'll reply within one working day.
+                You'll hear from the studio about your gifts within one working day, usually sooner.
               </p>
             </div>
           ) : (
@@ -119,13 +141,18 @@ ${form.idea}`;
                 <textarea name="idea" required rows={4} placeholder="Tell us your idea" value={form.idea} onChange={handleChange}
                   className="w-full border border-navy/15 p-3 rounded-rm bg-paper focus:outline-none focus:border-peach-deep focus:ring-4 focus:ring-peach/30 transition resize-none" />
 
-                <Button as="button" type="submit" variant="peach" block>
-                  Start a conversation →
+                <Button as="button" type="submit" variant="peach" block disabled={status === "sending"}>
+                  {status === "sending" ? "Sending..." : "Start a conversation →"}
                 </Button>
 
-                <p className="text-xs text-muted text-center">
-                  This opens WhatsApp with your enquiry pre-filled to our studio number.
-                </p>
+                {status === "error" && (
+                  <div className="bg-burgundy/5 text-burgundy text-sm p-3 rounded-rs border border-burgundy/20 text-center">
+                    Couldn't send that just now.{" "}
+                    <button type="button" onClick={openWhatsAppFallback} className="underline font-semibold">
+                      Send it on WhatsApp instead
+                    </button>
+                  </div>
+                )}
               </form>
             </>
           )}
