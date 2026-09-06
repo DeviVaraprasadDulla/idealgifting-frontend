@@ -5,6 +5,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [cartLoading, setCartLoading] = useState(true);
 
   // ================= LOAD CART =================
   // const loadCart = async () => {
@@ -26,6 +27,8 @@ export const CartProvider = ({ children }) => {
   } catch (error) {
     console.error("Cart load error:", error);
     setCartItems([]); // ✅ fallback
+  } finally {
+    setCartLoading(false);
   }
 };
 
@@ -66,6 +69,7 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems,
         setCartItems, // add this
+        cartLoading,
         addToCart,
         updateQuantity,
         removeFromCart,

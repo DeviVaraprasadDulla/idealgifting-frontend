@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../../api/axios";
 
 const Checkout = () => {
-  const { cartItems, getCartTotal } = useCart();
+  const { cartItems, cartLoading, getCartTotal } = useCart();
   const navigate = useNavigate();
 const [errors, setErrors] = useState({});
   const [addresses, setAddresses] = useState([]);
@@ -69,11 +69,15 @@ const states = [
   const total = getCartTotal();
 
   // ================= Redirect if cart empty =================
+  // Wait for the initial cart fetch to actually finish before deciding the
+  // cart is empty - on a hard navigation straight to /checkout, cartItems
+  // starts as [] before CartContext's own load completes, which was
+  // incorrectly bouncing a non-empty cart back to /cart.
   useEffect(() => {
-    if (cartItems.length === 0) {
+    if (!cartLoading && cartItems.length === 0) {
       navigate("/cart");
     }
-  }, [cartItems, navigate]);
+  }, [cartItems, cartLoading, navigate]);
 
   // ================= Load Addresses =================
   const loadAddresses = async () => {
