@@ -7,6 +7,7 @@ import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishlistContext";
 import { useAuth } from "../../../context/AuthContext";
 import ProductCard from "../components/ProductCard";
+import PersonalizationStudio from "../components/PersonalizationStudio";
 import { Heart } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -262,6 +263,10 @@ const handleAddToCart = async () => {
               <p className="text-muted leading-relaxed">
                 {product.description}
               </p>
+
+              <div className="pt-2">
+                <PersonalizationStudio product={product} />
+              </div>
 
               <div className="hidden lg:flex flex-col sm:flex-row gap-4 pt-4">
                 <button
