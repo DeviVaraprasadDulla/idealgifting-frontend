@@ -182,6 +182,13 @@ const Navbar = ({ topOffset = 0 }) => {
             >
               Corporate Gifting
             </Link>
+
+            <Link
+              to="/stories"
+              className="px-[15px] py-[10px] rounded-full text-[0.9rem] text-navy hover:bg-navy/[0.04] transition-colors"
+            >
+              Our Stories
+            </Link>
           </div>
 
           {/* Right controls (desktop + mobile) */}
