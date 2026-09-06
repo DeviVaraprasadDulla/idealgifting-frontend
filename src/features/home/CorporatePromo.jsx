@@ -1,35 +1,32 @@
-import Button from "../../components/ui/Button";
+import { Link } from "react-router-dom";
+import Reveal from "../../components/common/Reveal";
 
-const SERVICES = ["Custom trophies", "Employee recognition", "Event awards", "Bulk orders"];
+const SERVICES = ["Custom trophies", "Employee recognition", "Event awards", "Bulk orders", "Logo integration", "Client gifting"];
 
 function CorporatePromo() {
   return (
-    <section className="py-[clamp(56px,7.5vw,110px)]">
-      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
-        <div data-world="corporate" className="bg-world-soft rounded-rxl p-[clamp(26px,4vw,58px)]">
-          <span className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-world-deep">
-            Ideal Gifting for teams
-          </span>
-          <h2 className="text-d2 text-navy mt-3 max-w-lg">Recognition, made personal.</h2>
-          <p className="text-muted mt-3 max-w-md">
-            From milestone celebrations to awards and employee recognition, we turn your
-            appreciation into keepsakes people keep on the desk.
-          </p>
-
-          <div className="flex flex-wrap gap-2 mt-6">
-            {SERVICES.map((s) => (
-              <span key={s} className="bg-paper px-4 py-2 rounded-full text-sm text-navy shadow-card">
-                {s}
-              </span>
-            ))}
+    <section className="sec">
+      <div className="wrap">
+        <Reveal
+          className="panel"
+          data-world="corporate"
+          style={{ background: "var(--w-soft)", display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 38, alignItems: "center" }}
+        >
+          <div>
+            <span className="eyebrow">Corporate gifting</span>
+            <h2 className="d2" style={{ margin: "16px 0 12px" }}>Recognition, made personal.</h2>
+            <p className="lede">
+              From milestone celebrations to awards and employee recognition, we turn your
+              brand and your appreciation into keepsakes people keep on the desk.
+            </p>
+            <div className="chips" style={{ marginTop: 20 }}>
+              {SERVICES.map((c) => <span key={c} className="chip">{c}</span>)}
+            </div>
+            <Link className="btn btn-world" style={{ marginTop: 24 }} to="/corporate">
+              Plan your corporate gifting <span className="arw">→</span>
+            </Link>
           </div>
-
-          <div className="mt-8">
-            <Button to="/corporate" variant="world">
-              Plan your corporate gifting →
-            </Button>
-          </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,81 +1,48 @@
-import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import API from "../../api/axios";
 
+/**
+ * Exact reproduction of the reference's scrolling marquee (.marquee /
+ * .marquee-track, 34s linear infinite, content doubled for a seamless
+ * loop, pauses on hover) - not a dismissible fixed banner. The real
+ * backend currently returns a single active announcement rather than a
+ * list, so that one real message is repeated to fill the strip - never
+ * a fabricated additional message.
+ */
 const AnnouncementBar = ({ onHeightChange }) => {
-  const [announcement, setAnnouncement] = useState(null);
-  const [visible, setVisible] = useState(true);
-  const [dismissed, setDismissed] = useState(false);
-
+  const [message, setMessage] = useState(null);
   const barRef = useRef(null);
 
-  // Fetch
   useEffect(() => {
-    const fetchAnnouncement = async () => {
-      try {
-        const res = await API.get("/settings/announcement/");
-        setAnnouncement(res.data);
-      } catch (err) {
-        console.log("No active announcement");
-      }
-    };
-
-    fetchAnnouncement();
+    API.get("/settings/announcement/")
+      .then((res) => setMessage(res.data?.message || null))
+      .catch(() => setMessage(null));
   }, []);
 
-  // Scroll behavior
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY <= 60);
-    };
+    if (barRef.current) onHeightChange(barRef.current.offsetHeight);
+    return () => onHeightChange(0);
+  }, [message, onHeightChange]);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  if (!message) return null;
 
-  // Dynamic height detection
-  useEffect(() => {
-    if (barRef.current && visible && !dismissed) {
-      onHeightChange(barRef.current.offsetHeight);
-    } else {
-      onHeightChange(0);
-    }
-  }, [visible, dismissed, announcement]);
-
-  if (!announcement || dismissed) return null;
+  const items = Array(6).fill(message);
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          ref={barRef}
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -50, opacity: 0 }}
-          transition={{ duration: 0.35 }}
-          className="
-            fixed top-0 left-0 right-0 z-[56]
-            bg-navy text-cream text-[0.72rem] font-medium uppercase tracking-[0.16em]
-            flex items-center justify-center
-            py-[9px]
-          "
-        >
-          <div className="max-w-wrap w-full px-[clamp(20px,5vw,64px)] flex items-center justify-center relative">
-            <span className="text-center truncate">
-              <span className="text-peach mr-2">✦</span>
-              {announcement.message}
-            </span>
-
-            <button
-              onClick={() => setDismissed(true)}
-              className="absolute right-0 text-cream/70 hover:text-cream text-sm normal-case tracking-normal"
-            >
-              ✕
-            </button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className="marquee" ref={barRef} aria-hidden="true">
+      <div className="marquee-track">
+        {[0, 1].map((rep) => (
+          <span key={rep} style={{ display: "flex" }}>
+            {items.map((text, i) => (
+              <span key={i}>
+                <i>✦</i>
+                {text}
+              </span>
+            ))}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 };
 

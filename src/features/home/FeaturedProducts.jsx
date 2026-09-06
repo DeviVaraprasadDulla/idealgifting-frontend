@@ -1,68 +1,54 @@
 import { useEffect, useState } from "react";
-import ProductCard from "../products/components/ProductCard"; // adjust path if needed
+import { Link } from "react-router-dom";
+import ProductCard from "../products/components/ProductCard";
 import { getFeaturedProducts } from "../../api/productApi";
+import Reveal from "../../components/common/Reveal";
 
 function FeaturedProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await getFeaturedProducts();
-        setProducts(Array.isArray(response) ? response : response.data || []); // IMPORTANT
-      } catch (error) {
-        console.error("Failed to fetch featured products", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    getFeaturedProducts()
+      .then((res) => setProducts(res.data || []))
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <section className="py-[clamp(56px,7.5vw,110px)]">
-      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
-        {/* Section Header */}
-        <div className="flex flex-wrap items-end justify-between gap-5 mb-[clamp(28px,4vw,52px)]">
+    <section className="sec" style={{ paddingTop: 0 }}>
+      <div className="wrap">
+        <Reveal className="sec-head">
           <div>
-            <span className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold before:content-[''] before:w-[26px] before:h-px before:bg-current before:opacity-60">
-              Handpicked
-            </span>
-            <h2 className="mt-3 text-d2 text-navy">Featured Gifts</h2>
+            <span className="eyebrow">Featured</span>
+            <h2 className="d2" style={{ marginTop: 16 }}>Crafted for memories. Made for smiles.</h2>
+            <p className="lede">The pieces people order again and again — usually for someone entirely different.</p>
           </div>
-        </div>
+          <Link className="btn btn-ghost" to="/products">
+            Shop all gifts <span className="arw">→</span>
+          </Link>
+        </Reveal>
 
-        {/* Loading Skeleton */}
-        {loading && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-[clamp(14px,1.7vw,24px)]">
-            {[...Array(4)].map((_, index) => (
-              <div
-                key={index}
-                className="bg-paper rounded-rl h-80 animate-pulse"
-              />
+        {loading ? (
+          <div className="p-grid">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="card" style={{ height: 340 }} />
             ))}
           </div>
-        )}
-
-        {/* Product Grid */}
-        {!loading && Array.isArray(products) && products.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-[clamp(14px,1.7vw,24px)]">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+        ) : products.length > 0 ? (
+          <div className="p-grid">
+            {products.map((product, i) => (
+              <Reveal as="div" key={product.id} index={i}>
+                <ProductCard product={product} />
+              </Reveal>
             ))}
           </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && (!Array.isArray(products) || products.length === 0) && (
-          <p className="text-muted text-center">
-            No featured products available.
-          </p>
+        ) : (
+          <p className="lede center">No featured products available yet.</p>
         )}
       </div>
     </section>
   );
 }
+
 export default FeaturedProducts;

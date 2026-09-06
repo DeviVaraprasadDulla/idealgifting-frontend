@@ -2,43 +2,38 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getTaxonomy } from "../../api/taxonomyApi";
 import { FEELING_META, DEFAULT_META } from "../../data/taxonomyMeta";
+import Reveal from "../../components/common/Reveal";
 
 function FeelingsSection() {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    getTaxonomy("feeling")
-      .then((res) => setOptions(res.data))
-      .catch(() => setOptions([]));
+    getTaxonomy("feeling").then((res) => setOptions(res.data)).catch(() => setOptions([]));
   }, []);
 
   if (options.length === 0) return null;
 
   return (
-    <section className="py-[clamp(56px,7.5vw,110px)] bg-gradient-to-b from-transparent to-cream/40">
-      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
-        <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold">
-            Start with the feeling
-          </span>
-          <h2 className="text-d2 text-navy mt-3">What do you want them to feel?</h2>
-          <p className="text-muted mt-2">Pick the reaction you're after. We'll show you the gifts that get it.</p>
-        </div>
+    <section className="sec" style={{ background: "linear-gradient(180deg,#FDF6ED 0%,#FBF0EF 45%,#FAF3F7 100%)" }}>
+      <div className="wrap">
+        <Reveal className="sec-head">
+          <div>
+            <span className="eyebrow">Start with the feeling</span>
+            <h2 className="d2" style={{ marginTop: 16 }}>What do you want them to feel?</h2>
+            <p className="lede">Pick the reaction you're after. We'll show you the gifts that get it.</p>
+          </div>
+        </Reveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-[clamp(14px,1.7vw,24px)]">
-          {options.map((opt) => {
+        <div className="feelings">
+          {options.map((opt, i) => {
             const meta = FEELING_META[opt.value] || DEFAULT_META;
             return (
-              <Link
-                key={opt.id}
-                to={`/feelings/${opt.id}`}
-                data-world={meta.world}
-                className="bg-world-soft rounded-rl p-6 text-left transition-transform hover:-translate-y-1"
-              >
-                <div className="text-2xl mb-3">{meta.glyph}</div>
-                <h3 className="font-display font-semibold text-navy mb-1">{opt.value}</h3>
-                <p className="text-sm text-muted">{meta.line}</p>
-              </Link>
+              <Reveal as={Link} key={opt.id} index={i} className="feel" to={`/feelings/${opt.id}`} data-world={meta.world}>
+                <span className="icon-chip" aria-hidden="true"><span>{meta.glyph}</span></span>
+                <b>{opt.value}</b>
+                <p>{meta.line}</p>
+                <span className="go">See the gifts →</span>
+              </Reveal>
             );
           })}
         </div>

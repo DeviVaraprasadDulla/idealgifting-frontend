@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getProducts } from "../../api/productApi";
-import ProductCard from "../products/components/ProductCard";
-import Button from "../../components/ui/Button";
+import Reveal from "../../components/common/Reveal";
 
+/**
+ * Exact .stories / .story card treatment. Since the real Review model
+ * has no text field, each "story" card shows real per-product rating
+ * data rather than an invented customer quote.
+ */
 function StoriesPreview() {
   const [topRated, setTopRated] = useState([]);
 
@@ -12,7 +17,7 @@ function StoriesPreview() {
         const rated = res.data
           .filter((p) => (p.rating_count || 0) > 0)
           .sort((a, b) => b.average_rating - a.average_rating)
-          .slice(0, 4);
+          .slice(0, 3);
         setTopRated(rated);
       })
       .catch(() => setTopRated([]));
@@ -21,23 +26,31 @@ function StoriesPreview() {
   if (topRated.length === 0) return null;
 
   return (
-    <section className="py-[clamp(56px,7.5vw,110px)]">
-      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+    <section className="sec" style={{ background: "var(--cream)" }}>
+      <div className="wrap">
+        <Reveal className="sec-head">
           <div>
-            <span className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold">
-              Our stories
-            </span>
-            <h2 className="text-d2 text-navy mt-3">Loved, one gift at a time.</h2>
+            <span className="eyebrow">Customer stories</span>
+            <h2 className="d2" style={{ marginTop: 16 }}>Loved, one gift at a time ❤️</h2>
+            <p className="lede">Real ratings from real orders.</p>
           </div>
-          <Button to="/stories" variant="ghost">
-            Read our stories →
-          </Button>
-        </div>
+          <Link className="btn btn-ghost" to="/stories">
+            Read all stories <span className="arw">→</span>
+          </Link>
+        </Reveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(14px,1.7vw,24px)]">
-          {topRated.map((product) => (
-            <ProductCard key={product.id} product={product} />
+        <div className="stories">
+          {topRated.map((p, i) => (
+            <Reveal as={Link} key={p.id} index={i} className="story" to={`/products/${p.slug}`}>
+              <q>{p.name} — {p.average_rating}★ from {p.rating_count} real review{p.rating_count !== 1 ? "s" : ""}.</q>
+              <div className="who">
+                <span className="avatar">{p.category_name?.charAt(0) || "★"}</span>
+                <div>
+                  <b style={{ display: "block", fontFamily: "var(--f-d)", fontSize: "0.95rem" }}>{p.category_name}</b>
+                  <span className="stars">{"★".repeat(Math.round(p.average_rating))}</span>
+                </div>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>

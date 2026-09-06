@@ -1,11 +1,31 @@
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishlistContext";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
-import { ShoppingBag, Heart } from "lucide-react";
+import { OCCASION_META, FEELING_META, DEFAULT_META } from "../../../data/taxonomyMeta";
 
+// Derives a color "world" from the product's own real tagged
+// Occasion/Feeling filters - never a fabricated or random assignment.
+function worldFor(product) {
+  const tags = product.filters || [];
+  const occasion = tags.find((t) => t.filter_name === "Occasion");
+  if (occasion && OCCASION_META[occasion.filter_option_value]) {
+    return OCCASION_META[occasion.filter_option_value].world;
+  }
+  const feeling = tags.find((t) => t.filter_name === "Feeling");
+  if (feeling && FEELING_META[feeling.filter_option_value]) {
+    return FEELING_META[feeling.filter_option_value].world;
+  }
+  return DEFAULT_META.world;
+}
+
+/**
+ * Exact reproduction of the reference's .p-card structure (badges,
+ * wish-btn, art image, hover-revealed quick-look, category/name/hook,
+ * price + CTA row) - see .p-card and friends in index.css. Content is
+ * all real product data; only the visual scaffolding is the reference's.
+ */
 function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
@@ -28,111 +48,62 @@ function ProductCard({ product }) {
     toast(nowWishlisted ? "Added to wishlist ❤️" : "Removed from wishlist");
   };
 
-  const handleAddToCart = async (e) => {
+  const handleQuickAdd = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     await addToCart(product.id);
-
-    toast.custom((t) => (
-      <div
-        className={`bg-paper shadow-elevated rounded-rm p-3 flex items-center gap-3 w-72 transition ${
-          t.visible ? "animate-enter" : "animate-leave"
-        }`}
-      >
-        <img
-          src={product.images?.[0]?.image}
-          alt={product.name}
-          className="w-12 h-12 object-cover rounded-rs"
-        />
-        <div className="flex-1">
-          <p className="text-sm font-display font-semibold text-navy line-clamp-1">
-            {product.name}
-          </p>
-          <p className="text-xs text-leaf">Added to your gift box ✓</p>
-        </div>
-        <Link
-          to="/cart"
-          className="text-xs bg-navy text-ivory px-3 py-1.5 rounded-full"
-        >
-          View
-        </Link>
-      </div>
-    ));
+    toast.success("Added to your gift box ✓");
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 220, damping: 22 }}
-      className="bg-paper rounded-rl shadow-card hover:shadow-lift overflow-hidden transition-shadow"
-    >
-      <Link to={`/products/${product.slug}`} className="block relative">
-        {/* IMAGE */}
-        <div className="relative aspect-square overflow-hidden bg-world-soft">
-          <img
-            src={product.images?.[0]?.image}
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          />
-
-          {hasDiscount && (
-            <div className="absolute top-3 left-3 bg-navy text-ivory text-[0.66rem] font-bold uppercase tracking-[0.1em] px-[10px] py-[5px] rounded-full">
-              {product.discount_percentage}% off
-            </div>
-          )}
-
-          <button
-            onClick={handleToggleWishlist}
-            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-            className="absolute top-3 right-3 bg-paper/90 backdrop-blur-sm p-2 rounded-full shadow-card hover:scale-110 transition-transform"
-          >
-            <Heart
-              size={16}
-              className={wishlisted ? "text-burgundy fill-burgundy" : "text-navy"}
-            />
-          </button>
-
-          <button
-            onClick={handleAddToCart}
-            aria-label="Add to gift box"
-            className="absolute bottom-3 right-3 bg-navy text-ivory p-3 rounded-full shadow-card hover:scale-110 transition-transform"
-          >
-            <ShoppingBag size={17} />
-          </button>
+    <article className="p-card" data-world={worldFor(product)}>
+      <div className="p-media">
+        <div className="p-badges">
+          {product.is_best_selling && <span className="badge peach">Bestseller</span>}
+          {hasDiscount && <span className="badge world">{product.discount_percentage}% off</span>}
         </div>
 
-        {/* CONTENT */}
-        <div className="p-4 space-y-2">
-          <h3 className="font-display font-semibold text-[1.05rem] leading-snug line-clamp-2 min-h-[2.6em] text-navy">
-            {product.name}
-          </h3>
+        <button
+          className={`wish-btn${wishlisted ? " on" : ""}`}
+          onClick={handleToggleWishlist}
+          aria-label={wishlisted ? "Remove from wishlist" : "Save to your wishlist"}
+          aria-pressed={wishlisted}
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M12 20s-7-4.6-7-9.4A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7 3c0 4.8-7 9.4-7 9.4z" />
+          </svg>
+        </button>
 
-          <div className="flex items-center gap-1 text-sm text-muted">
-            <span className="text-gold">★</span> {product.average_rating || 0}{" "}
-            ({product.rating_count || 0})
+        <Link to={`/products/${product.slug}`} aria-label={product.name}>
+          <div className="art">
+            {product.images?.[0]?.image && <img src={product.images[0].image} alt={product.name} />}
           </div>
+        </Link>
 
-          <div className="flex items-center gap-2">
-            <span className="font-num font-extrabold text-[1.15rem] text-navy">
-              ₹{product.discounted_price}
-            </span>
-
-            {hasDiscount && (
-              <span className="font-num text-muted line-through text-sm">
-                ₹{product.price}
-              </span>
-            )}
-          </div>
-
-          <div className="pt-1">
-            <span className="inline-flex items-center gap-1 text-sm text-peach-deep font-semibold">
-              Personalise it <span aria-hidden="true">→</span>
-            </span>
-          </div>
+        <div className="p-quick">
+          <button className="btn btn-ivory btn-sm btn-block" onClick={handleQuickAdd}>
+            Add to gift box
+          </button>
         </div>
-      </Link>
-    </motion.div>
+      </div>
+
+      <div className="p-body">
+        <span className="p-cat">{product.category_name}</span>
+        <h3 className="p-name">
+          <Link to={`/products/${product.slug}`}>{product.name}</Link>
+        </h3>
+        <p className="p-hook">{product.description?.slice(0, 80)}</p>
+        <div className="p-foot">
+          <span className="price">
+            ₹{product.discounted_price}
+            {hasDiscount && <s>₹{product.price}</s>}
+          </span>
+          <Link className="p-cta" to={`/products/${product.slug}`}>
+            Personalise it <span>→</span>
+          </Link>
+        </div>
+      </div>
+    </article>
   );
 }
 

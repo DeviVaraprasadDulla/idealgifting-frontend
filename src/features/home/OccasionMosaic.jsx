@@ -2,52 +2,62 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getTaxonomy } from "../../api/taxonomyApi";
 import { OCCASION_META, DEFAULT_META } from "../../data/taxonomyMeta";
-import Button from "../../components/ui/Button";
+import Reveal from "../../components/common/Reveal";
+
+// Exact bento size-pattern from the reference's MOSAIC array.
+const MOSAIC = ["big", "w3", "w3", "w2", "w2", "w2", "w3", "w3", "w3", "w3"];
 
 function OccasionMosaic() {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    getTaxonomy("occasion")
-      .then((res) => setOptions(res.data))
-      .catch(() => setOptions([]));
+    getTaxonomy("occasion").then((res) => setOptions(res.data)).catch(() => setOptions([]));
   }, []);
 
   if (options.length === 0) return null;
 
   return (
-    <section className="py-[clamp(56px,7.5vw,110px)] bg-cream/40">
-      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)]">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+    <section className="sec" style={{ background: "var(--cream)" }}>
+      <div className="wrap">
+        <Reveal className="sec-head">
           <div>
-            <span className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold">
-              Occasions
-            </span>
-            <h2 className="text-d2 text-navy mt-3">Every occasion has a story.</h2>
+            <span className="eyebrow">Occasions</span>
+            <h2 className="d2" style={{ marginTop: 16 }}>Every occasion has a story.</h2>
+            <p className="lede">Real occasions, each with its own real collection.</p>
           </div>
-          <Button to="/occasions" variant="ghost">
-            See all occasions →
-          </Button>
-        </div>
+          <Link className="btn btn-ghost" to="/occasions">
+            See all occasions <span className="arw">→</span>
+          </Link>
+        </Reveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(14px,1.7vw,24px)]">
-          {options.slice(0, 8).map((opt) => {
+        <div className="mosaic">
+          {options.map((opt, i) => {
             const meta = OCCASION_META[opt.value] || DEFAULT_META;
+            const cls = MOSAIC[i] || "";
             return (
-              <Link
+              <Reveal
+                as={Link}
                 key={opt.id}
+                index={i}
+                className={`occ ${cls}`}
                 to={`/occasions/${opt.id}`}
                 data-world={meta.world}
-                className="relative bg-world-soft rounded-rl p-5 overflow-hidden transition-transform hover:-translate-y-1"
               >
-                <span className="absolute top-3 right-3 text-[0.62rem] font-bold uppercase tracking-[0.1em] bg-paper/70 px-2 py-1 rounded-full text-world-deep">
-                  {opt.product_count} gifts
-                </span>
-                <div className="w-11 h-11 rounded-[14px] bg-world grid place-items-center text-xl mb-3">
-                  {meta.glyph}
+                <span className="veil" aria-hidden="true" />
+                <span className="glyph" aria-hidden="true">{meta.glyph}</span>
+                <div className="occ-top">
+                  <span className="icon-chip" aria-hidden="true"><span>{meta.glyph}</span></span>
+                  <span className="cnt">{opt.product_count} gift{opt.product_count !== 1 ? "s" : ""}</span>
                 </div>
-                <h3 className="font-display font-semibold text-navy">{opt.value}</h3>
-              </Link>
+                <span>
+                  <b>{opt.value}</b>
+                  {i < 2 && meta.line && (
+                    <p className="sm" style={{ marginTop: 8, maxWidth: "26ch", position: "relative", zIndex: 2, color: "#54637C" }}>
+                      {meta.line}
+                    </p>
+                  )}
+                </span>
+              </Reveal>
             );
           })}
         </div>

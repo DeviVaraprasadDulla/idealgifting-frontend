@@ -1,180 +1,166 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { getBanners } from "../api/bannerApi";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { getFeaturedProducts, getProducts } from "../api/productApi";
+import { getTaxonomy } from "../api/taxonomyApi";
+import { OCCASION_META, DEFAULT_META } from "../data/taxonomyMeta";
 
-const AUTO_DELAY = 6000;
+const QUICK_OCCASIONS = ["Birthday", "Anniversary", "Baby & Kids", "Raksha Bandhan", "Wedding", "Corporate"];
 
-const HeroSection = () => {
-  const [banners, setBanners] = useState([]);
-  const [current, setCurrent] = useState(0);
-  const [progressKey, setProgressKey] = useState(0);
-
-  const navigate = useNavigate();
-  const username = localStorage.getItem("username") || "Welcome Back";
+/**
+ * Exact reproduction of the reference's hero: a copy column (eyebrow,
+ * headline with an italic emphasis word, lede, CTAs, quick occasion
+ * chips, proof stats) beside a "showcase" product-deck carousel that
+ * auto-advances, fans real products by data-off offset, and shifts the
+ * section's color world to the active product - all real product data,
+ * no fabricated business statistics.
+ */
+function HeroSection() {
+  const [showcase, setShowcase] = useState([]);
+  const [occasions, setOccasions] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [active, setActive] = useState(0);
+  const timerRef = useRef(null);
+  const hoveringRef = useRef(false);
 
   useEffect(() => {
-    getBanners().then((data) => setBanners(data));
+    getFeaturedProducts().then((res) => setShowcase(res.data.slice(0, 5))).catch(() => {});
+    getTaxonomy("occasion").then((res) => setOccasions(res.data)).catch(() => {});
+    getProducts().then((res) => {
+      const products = res.data;
+      const totalReviews = products.reduce((s, p) => s + (p.rating_count || 0), 0);
+      const avg = totalReviews
+        ? (products.reduce((s, p) => s + p.average_rating * (p.rating_count || 0), 0) / totalReviews).toFixed(1)
+        : null;
+      setStats({ count: products.length, avg, totalReviews });
+    }).catch(() => {});
   }, []);
 
+  const n = showcase.length;
+
+  const play = () => {
+    clearInterval(timerRef.current);
+    if (hoveringRef.current || n === 0) return;
+    timerRef.current = setInterval(() => setActive((a) => (a + 1) % n), 5000);
+  };
+
   useEffect(() => {
-    if (!banners.length) return;
+    play();
+    return () => clearInterval(timerRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [n]);
 
-    const interval = setInterval(() => {
-      nextSlide();
-    }, AUTO_DELAY);
+  if (n === 0) return null;
 
-    return () => clearInterval(interval);
-  }, [banners, current]);
+  const activeProduct = showcase[active];
+  const quickChips = occasions.filter((o) => QUICK_OCCASIONS.includes(o.value));
 
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % banners.length);
-    setProgressKey((prev) => prev + 1);
+  const offsetFor = (k) => {
+    let off = k - active;
+    if (off > n / 2) off -= n;
+    if (off < -n / 2) off += n;
+    return Math.abs(off) > 2 ? 3 : off;
   };
-
-  const prevSlide = () => {
-    setCurrent((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
-    setProgressKey((prev) => prev + 1);
-  };
-
-  const getFestivalStyle = (festival) => {
-    switch (festival) {
-      case "valentine":
-        return "from-pink-600/70 via-rose-500/40 to-transparent";
-      case "birthday":
-        return "from-purple-600/70 via-indigo-500/40 to-transparent";
-      case "anniversary":
-        return "from-yellow-600/70 via-amber-400/40 to-transparent";
-      default:
-        return "from-black/60 via-black/30 to-transparent";
-    }
-  };
-
-  if (!banners.length) return null;
-
-  const banner = banners[current];
 
   return (
-    <section className="relative">
-      <div className="max-w-wrap mx-auto px-[clamp(20px,5vw,64px)] pt-8 md:pt-10">
-        <div
-          className="
-            relative
-            aspect-[16/9]
-            sm:aspect-[16/7]
-            lg:aspect-[16/5]
-            rounded-rl
-            md:rounded-rxl
-            overflow-hidden
-            shadow-lift
-            group
-          "
-        >
-          {/* Background Image */}
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={banner.id}
-              src={banner.image}
-              alt={banner.title}
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.02 }}
-              animate={{ opacity: 1, scale: 1.05 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              onDragEnd={(e, { offset }) => {
-                if (offset.x < -80) nextSlide();
-                if (offset.x > 80) prevSlide();
-              }}
-            />
-          </AnimatePresence>
-
-          {/* Dark Overlay for Better Readability */}
-          <div className="absolute inset-0 bg-black/30" />
-
-          {/* Festival Gradient */}
-          <div
-            className={`absolute inset-0 bg-gradient-to-r ${getFestivalStyle(
-              banner.festival,
-            )}`}
-          />
-
-          {/* Offer Badge */}
-          {banner.offer_text && (
-            <div className="absolute top-4 left-4 md:top-6 md:left-6 bg-peach text-navy px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-semibold shadow-card z-20">
-              ✦ {banner.offer_text}
-            </div>
-          )}
-
-          {/* Hero Content */}
-          <div className="absolute inset-0 flex items-center z-10">
-            <div className="px-6 md:px-16 max-w-md md:max-w-lg text-ivory">
-              {/* Greeting */}
-              <motion.h2
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-sm sm:text-base md:text-xl font-medium font-sans text-cream"
-              >
-                Hi {username} 👋
-              </motion.h2>
-
-              {/* Headline */}
-              <motion.h1
-                key={banner.id + "-title"}
-                initial={{ opacity: 0, y: 25 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7 }}
-                className="font-display font-semibold text-2xl sm:text-3xl md:text-5xl leading-[1.08] tracking-headline mt-2"
-              >
-                {banner.title}
-              </motion.h1>
-
-              {/* Shop Now Button */}
-              <motion.button
-                onClick={() => navigate("/products")}
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                className="mt-4 md:mt-6 bg-peach text-navy px-5 md:px-6 py-2.5 md:py-3 rounded-full font-semibold shadow-card text-sm md:text-base"
-              >
-                Shop Now
-              </motion.button>
-            </div>
+    <section className="hero" data-world={OCCASION_META[activeProduct.category_name]?.world || "love"}>
+      <div className="hero-in">
+        <div>
+          <span className="eyebrow">Personalised gifting studio · India</span>
+          <h1 style={{ marginTop: 20 }}>
+            Your <em>story</em> deserves more than a gift.
+          </h1>
+          <p className="lede">
+            Frames, hampers and keepsakes built around your people, your moments and your
+            photographs — designed one at a time, previewed before they're printed.
+          </p>
+          <div className="hero-cta">
+            <Link className="btn btn-lg" to="/finder">
+              Find the perfect gift <span className="arw">→</span>
+            </Link>
+            <Link className="btn btn-ghost btn-lg" to="/products">
+              Explore our creations
+            </Link>
           </div>
 
-          {/* Arrows */}
-          <button
-            onClick={prevSlide}
-            className="hidden md:block absolute left-6 top-1/2 -translate-y-1/2 bg-ivory/85 backdrop-blur p-3 rounded-full shadow-card opacity-0 group-hover:opacity-100 transition z-20 text-navy"
-          >
-            ❮
-          </button>
+          {quickChips.length > 0 && (
+            <div className="hero-quick">
+              <span className="lbl">So… what are we celebrating?</span>
+              <div className="chips">
+                {quickChips.map((o) => {
+                  const meta = OCCASION_META[o.value] || DEFAULT_META;
+                  return (
+                    <Link key={o.id} className="chip" to={`/occasions/${o.id}`}>
+                      {meta.glyph} {o.value}
+                    </Link>
+                  );
+                })}
+              </div>
 
-          <button
-            onClick={nextSlide}
-            className="hidden md:block absolute right-6 top-1/2 -translate-y-1/2 bg-ivory/85 backdrop-blur p-3 rounded-full shadow-card opacity-0 group-hover:opacity-100 transition z-20 text-navy"
-          >
-            ❯
-          </button>
+              {stats && (
+                <div className="hero-proof">
+                  <div><b>{stats.count}</b><span>Handpicked gifts</span></div>
+                  {stats.avg && (
+                    <div><b>{stats.avg}★</b><span>From {stats.totalReviews}+ reviews</span></div>
+                  )}
+                  <div><b>Pan-India</b><span>Doorstep delivery</span></div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
-          {/* Progress Bar */}
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-ivory/30">
-            <motion.div
-              key={progressKey}
-              className="h-full bg-peach"
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
-              transition={{
-                duration: AUTO_DELAY / 1000,
-                ease: "linear",
-              }}
-            />
+        <div
+          className="showcase"
+          onMouseEnter={() => { hoveringRef.current = true; clearInterval(timerRef.current); }}
+          onMouseLeave={() => { hoveringRef.current = false; play(); }}
+        >
+          <div className="stage">
+            <span className="stage-tag">{activeProduct.category_name}</span>
+            {showcase.map((p, i) => (
+              <Link
+                key={p.id}
+                className="slide"
+                to={`/products/${p.slug}`}
+                data-off={offsetFor(i)}
+                aria-label={p.name}
+                onMouseEnter={() => { if (offsetFor(i) !== 0) setActive(i); }}
+              >
+                <div className="art">
+                  {p.images?.[0]?.image && <img src={p.images[0].image} alt={p.name} />}
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="showcase-foot">
+            <div className="fade-cap" key={activeProduct.id}>
+              <h3>{activeProduct.name}</h3>
+              <p>{activeProduct.description?.slice(0, 90)}</p>
+              <div className="meta">
+                <b className="price">₹{activeProduct.discounted_price}</b>
+                <span className="muted">·</span>
+                <Link className="p-cta" to={`/products/${activeProduct.slug}`}>
+                  Personalise it <span>→</span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="dots" role="tablist" aria-label="Featured keepsakes">
+              {showcase.map((p, i) => (
+                <button
+                  key={p.id}
+                  role="tab"
+                  aria-current={i === active}
+                  aria-label={p.name}
+                  onClick={() => { setActive(i); play(); }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
-};
+}
 
 export default HeroSection;

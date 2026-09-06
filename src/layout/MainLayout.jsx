@@ -1,22 +1,22 @@
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
-import Navbar, { NAVBAR_HEIGHT } from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
 import AnnouncementBar from "../components/common/AnnouncementBar";
 import FloatingWhatsApp from "../components/common/FloatingWhatsApp";
 
+/**
+ * Matches the reference's actual chrome model: the announcement marquee
+ * is a normal-flow block (not fixed), and the nav is simply
+ * `position: sticky; top: 0` - so no compensating top-padding or dynamic
+ * offset is needed on the content below it.
+ */
 const MainLayout = () => {
-  const [announcementHeight, setAnnouncementHeight] = useState(0);
-
   return (
     <>
-      <AnnouncementBar onHeightChange={setAnnouncementHeight} />
-      <Navbar topOffset={announcementHeight} />
+      <AnnouncementBar onHeightChange={() => {}} />
+      <Navbar />
 
-      <div
-        style={{ paddingTop: NAVBAR_HEIGHT + announcementHeight }}
-        className="min-h-screen flex flex-col"
-      >
+      <div className="min-h-screen flex flex-col">
         <div className="flex-1">
           <Outlet />
         </div>
