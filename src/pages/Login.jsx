@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import logoHorizontal from "../assets/logos/logo-horizontal.png";
@@ -8,6 +9,7 @@ import logoHorizontal from "../assets/logos/logo-horizontal.png";
 const Login = () => {
   const { login, googleLogin } = useAuth();
   const { loadCart } = useCart();
+  const { loadWishlist } = useWishlist();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +34,7 @@ const Login = () => {
 
       if (response.success) {
         await loadCart();
+        await loadWishlist();
         navigate(from, { replace: true });
       } else {
         setErrorMessage(response.error || "Invalid credentials");
@@ -53,6 +56,7 @@ const Login = () => {
 
       if (response.success) {
         await loadCart();
+        await loadWishlist();
         navigate(from, { replace: true });
       } else {
         setErrorMessage(response.error || "Google login failed");

@@ -1,12 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCart } from "../../../context/CartContext";
+import { useWishlist } from "../../../context/WishlistContext";
+import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Heart } from "lucide-react";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const hasDiscount = product.discount_percentage > 0;
+  const wishlisted = isWishlisted(product.id);
+
+  const handleToggleWishlist = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user) {
+      toast("Please login to save to your wishlist");
+      navigate("/login", { state: { from: { pathname: "/products" } } });
+      return;
+    }
+
+    const nowWishlisted = await toggleWishlist(product.id);
+    toast(nowWishlisted ? "Added to wishlist ❤️" : "Removed from wishlist");
+  };
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
@@ -61,6 +81,17 @@ function ProductCard({ product }) {
               {product.discount_percentage}% off
             </div>
           )}
+
+          <button
+            onClick={handleToggleWishlist}
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            className="absolute top-3 right-3 bg-paper/90 backdrop-blur-sm p-2 rounded-full shadow-card hover:scale-110 transition-transform"
+          >
+            <Heart
+              size={16}
+              className={wishlisted ? "text-burgundy fill-burgundy" : "text-navy"}
+            />
+          </button>
 
           <button
             onClick={handleAddToCart}

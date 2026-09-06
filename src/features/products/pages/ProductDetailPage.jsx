@@ -4,12 +4,18 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { getProductDetail, getProducts } from "../../../api/productApi";
 import { useCart } from "../../../context/CartContext";
+import { useWishlist } from "../../../context/WishlistContext";
+import { useAuth } from "../../../context/AuthContext";
 import ProductCard from "../components/ProductCard";
+import { Heart } from "lucide-react";
+import toast from "react-hot-toast";
 
 function ProductDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart, cartItems } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const { user } = useAuth();
 
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
@@ -133,6 +139,17 @@ const handleBuyNow = async () => {
     setBuyNowLoading(false);
   }
 };
+const handleToggleWishlist = async () => {
+  if (!user) {
+    toast("Please login to save to your wishlist");
+    navigate("/login", { state: { from: { pathname: `/products/${slug}` } } });
+    return;
+  }
+
+  const nowWishlisted = await toggleWishlist(product.id);
+  toast(nowWishlisted ? "Added to wishlist ❤️" : "Removed from wishlist");
+};
+
 const handleAddToCart = async () => {
   if (!product) return;
 
@@ -266,6 +283,17 @@ const handleAddToCart = async () => {
                 >
                   {buyNowLoading ? "Processing..." : "Buy Now"}
                 </button>
+
+                <button
+                  onClick={handleToggleWishlist}
+                  aria-label={isWishlisted(product.id) ? "Remove from wishlist" : "Add to wishlist"}
+                  className="flex-shrink-0 w-[52px] h-[52px] rounded-full shadow-[inset_0_0_0_1.4px_rgba(15,33,64,.15)] grid place-items-center hover:bg-navy/5 transition-colors"
+                >
+                  <Heart
+                    size={20}
+                    className={isWishlisted(product.id) ? "text-burgundy fill-burgundy" : "text-navy"}
+                  />
+                </button>
               </div>
             </div>
           </div>
@@ -326,6 +354,16 @@ const handleAddToCart = async () => {
           className="flex-1 bg-peach text-navy py-3 rounded-full font-semibold text-sm disabled:opacity-40"
         >
           {buyNowLoading ? "Processing..." : "Buy Now"}
+        </button>
+        <button
+          onClick={handleToggleWishlist}
+          aria-label={isWishlisted(product.id) ? "Remove from wishlist" : "Add to wishlist"}
+          className="flex-shrink-0 w-[46px] rounded-full shadow-[inset_0_0_0_1.4px_rgba(15,33,64,.15)] grid place-items-center"
+        >
+          <Heart
+            size={18}
+            className={isWishlisted(product.id) ? "text-burgundy fill-burgundy" : "text-navy"}
+          />
         </button>
       </div>
 
