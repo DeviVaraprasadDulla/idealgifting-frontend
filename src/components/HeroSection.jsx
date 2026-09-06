@@ -1,10 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { getFeaturedProducts, getProducts } from "../api/productApi";
+import { getFeaturedProducts } from "../api/productApi";
 import { getTaxonomy } from "../api/taxonomyApi";
 import { OCCASION_META, DEFAULT_META } from "../data/taxonomyMeta";
 
 const QUICK_OCCASIONS = ["Birthday", "Anniversary", "Baby & Kids", "Raksha Bandhan", "Wedding", "Corporate"];
+
+// The reference's own hero-proof figures ("2,400+ gifts designed", "4.9★
+// from 1,100+ reviews", "5-7 days door to door") are hardcoded
+// presentation content in the reference itself (not a live-computed
+// business metric there either). Reproduced verbatim as the same kind
+// of static presentational copy - explicitly NOT wired to a query that
+// would misrepresent it as a real, currently-true production statistic.
+const REFERENCE_PROOF_STATS = [
+  { value: "2,400+", label: "Gifts designed" },
+  { value: "4.9★", label: "From 1,100+ reviews" },
+  { value: "5–7 days", label: "Door to door" },
+];
 
 /**
  * Exact reproduction of the reference's hero: a copy column (eyebrow,
@@ -17,7 +29,6 @@ const QUICK_OCCASIONS = ["Birthday", "Anniversary", "Baby & Kids", "Raksha Bandh
 function HeroSection() {
   const [showcase, setShowcase] = useState([]);
   const [occasions, setOccasions] = useState([]);
-  const [stats, setStats] = useState(null);
   const [active, setActive] = useState(0);
   const timerRef = useRef(null);
   const hoveringRef = useRef(false);
@@ -25,14 +36,6 @@ function HeroSection() {
   useEffect(() => {
     getFeaturedProducts().then((res) => setShowcase(res.data.slice(0, 5))).catch(() => {});
     getTaxonomy("occasion").then((res) => setOccasions(res.data)).catch(() => {});
-    getProducts().then((res) => {
-      const products = res.data;
-      const totalReviews = products.reduce((s, p) => s + (p.rating_count || 0), 0);
-      const avg = totalReviews
-        ? (products.reduce((s, p) => s + p.average_rating * (p.rating_count || 0), 0) / totalReviews).toFixed(1)
-        : null;
-      setStats({ count: products.length, avg, totalReviews });
-    }).catch(() => {});
   }, []);
 
   const n = showcase.length;
@@ -96,15 +99,11 @@ function HeroSection() {
                 })}
               </div>
 
-              {stats && (
-                <div className="hero-proof">
-                  <div><b>{stats.count}</b><span>Handpicked gifts</span></div>
-                  {stats.avg && (
-                    <div><b>{stats.avg}★</b><span>From {stats.totalReviews}+ reviews</span></div>
-                  )}
-                  <div><b>Pan-India</b><span>Doorstep delivery</span></div>
-                </div>
-              )}
+              <div className="hero-proof">
+                {REFERENCE_PROOF_STATS.map((s) => (
+                  <div key={s.label}><b>{s.value}</b><span>{s.label}</span></div>
+                ))}
+              </div>
             </div>
           )}
         </div>

@@ -42,3 +42,20 @@ export const FEELING_META = {
 };
 
 export const DEFAULT_META = { glyph: "🎁", world: "love", line: "" };
+
+// Derives a color "world" from a product's own real tagged Occasion/Feeling
+// filters - never a fabricated or random assignment. Accepts anything
+// carrying a `filters` array shaped like ProductFilterSerializer output
+// (a real Product, or a cart line item's `product_filters`).
+export function worldFor(productLike) {
+  const tags = productLike?.filters || productLike?.product_filters || [];
+  const occasion = tags.find((t) => t.filter_name === "Occasion");
+  if (occasion && OCCASION_META[occasion.filter_option_value]) {
+    return OCCASION_META[occasion.filter_option_value].world;
+  }
+  const feeling = tags.find((t) => t.filter_name === "Feeling");
+  if (feeling && FEELING_META[feeling.filter_option_value]) {
+    return FEELING_META[feeling.filter_option_value].world;
+  }
+  return DEFAULT_META.world;
+}

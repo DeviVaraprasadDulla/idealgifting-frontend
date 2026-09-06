@@ -3,22 +3,7 @@ import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishlistContext";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
-import { OCCASION_META, FEELING_META, DEFAULT_META } from "../../../data/taxonomyMeta";
-
-// Derives a color "world" from the product's own real tagged
-// Occasion/Feeling filters - never a fabricated or random assignment.
-function worldFor(product) {
-  const tags = product.filters || [];
-  const occasion = tags.find((t) => t.filter_name === "Occasion");
-  if (occasion && OCCASION_META[occasion.filter_option_value]) {
-    return OCCASION_META[occasion.filter_option_value].world;
-  }
-  const feeling = tags.find((t) => t.filter_name === "Feeling");
-  if (feeling && FEELING_META[feeling.filter_option_value]) {
-    return FEELING_META[feeling.filter_option_value].world;
-  }
-  return DEFAULT_META.world;
-}
+import { worldFor } from "../../../data/taxonomyMeta";
 
 /**
  * Exact reproduction of the reference's .p-card structure (badges,

@@ -1,60 +1,24 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-
+/**
+ * Exact reproduction of the reference's .wa-float button - same size,
+ * position, shadow, hover lift/scale, pulsing .wa-float-ping ring (which
+ * respects prefers-reduced-motion via CSS), and the reference's own real
+ * WhatsApp icon path. No tooltip - the reference button doesn't have one.
+ */
 const FloatingWhatsApp = () => {
-  const [hovered, setHovered] = useState(false);
-
-  const phoneNumber = "916305540600"; // change later
-  const message = "Hi, I need help with my order.";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message,
-  )}`;
-
   return (
-    <div className="fixed bottom-4 right-4 md:bottom-[22px] md:right-[22px] z-[100] flex items-center">
-      {/* Tooltip */}
-      <motion.div
-        initial={{ opacity: 0, x: 8 }}
-        animate={{
-          opacity: hovered ? 1 : 0,
-          x: hovered ? 0 : 8,
-        }}
-        transition={{ duration: 0.2 }}
-        className="relative mr-3 hidden md:block"
-      >
-        <div className="bg-navy text-cream text-xs px-3 py-1.5 rounded-lg">
-          Chat with us
-        </div>
-        <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-navy rotate-45"></div>
-      </motion.div>
-
-      {/* Ping ring + button share their own fixed-size relative box, kept
-          separate from the tooltip so the ring can never stretch to match
-          the tooltip's (invisible-but-still-laid-out) width. */}
-      <div className="relative w-[52px] h-[52px] md:w-[58px] md:h-[58px] flex-shrink-0">
-        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-55 motion-safe:animate-ping [animation-duration:2.6s]" />
-
-        <motion.a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onHoverStart={() => setHovered(true)}
-          onHoverEnd={() => setHovered(false)}
-          whileHover={{ scale: 1.05, y: -3 }}
-          whileTap={{ scale: 0.95 }}
-          className="absolute inset-0 rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_10px_24px_-8px_rgba(37,211,102,.6),0_2px_6px_rgba(15,33,64,.2)] hover:shadow-[0_14px_30px_-8px_rgba(37,211,102,.7),0_3px_8px_rgba(15,33,64,.25)] transition-shadow"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            fill="white"
-            className="w-6 h-6 md:w-7 md:h-7"
-          >
-            <path d="M16 .396C7.163.396 0 7.559 0 16.396c0 2.885.756 5.598 2.073 7.965L0 32l7.857-2.041a15.93 15.93 0 0 0 8.143 2.237c8.837 0 16-7.163 16-16S24.837.396 16 .396zm0 29.165c-2.553 0-4.967-.662-7.075-1.828l-.505-.299-4.66 1.211 1.243-4.541-.329-.527a13.962 13.962 0 0 1-2.145-7.381c0-7.72 6.28-14 14-14s14 6.28 14 14-6.28 14-14 14zm7.595-10.485c-.414-.207-2.45-1.207-2.829-1.343-.379-.138-.655-.207-.931.207s-1.07 1.343-1.312 1.621c-.241.276-.482.31-.896.103-.414-.207-1.747-.643-3.328-2.049-1.23-1.096-2.059-2.449-2.3-2.863-.241-.414-.026-.638.181-.845.187-.186.414-.482.621-.724.207-.241.276-.414.414-.69.138-.276.069-.517-.034-.724-.103-.207-.931-2.242-1.276-3.069-.336-.807-.677-.698-.931-.711l-.793-.014c-.276 0-.724.103-1.103.517s-1.448 1.414-1.448 3.448c0 2.034 1.483 4 1.69 4.276.207.276 2.92 4.459 7.084 6.254.99.427 1.762.681 2.364.871.993.315 1.897.271 2.613.165.797-.119 2.45-1 2.794-1.966.345-.965.345-1.793.241-1.966-.103-.172-.379-.276-.793-.483z" />
-          </svg>
-        </motion.a>
-      </div>
-    </div>
+    <a
+      className="wa-float"
+      href="https://wa.me/916305540600"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with us on WhatsApp"
+    >
+      <span className="wa-float-ping" aria-hidden="true" />
+      <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+        <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z" />
+        <path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.85.5 3.6 1.36 5.1L2 22l5.05-1.32A9.94 9.94 0 0 0 12.02 22c5.52 0 10-4.48 10-10S17.54 2 12.02 2zm0 18.15c-1.61 0-3.19-.43-4.56-1.25l-.33-.19-3.28.86.88-3.2-.21-.33a8.15 8.15 0 0 1-1.25-4.34c0-4.51 3.67-8.18 8.18-8.18a8.13 8.13 0 0 1 5.79 2.4 8.13 8.13 0 0 1 2.4 5.79c0 4.51-3.67 8.18-8.18 8.18z" />
+      </svg>
+    </a>
   );
 };
 

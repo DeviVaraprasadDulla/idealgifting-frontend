@@ -62,3 +62,36 @@ export const BirthdayIcon = (props) => (
     <circle cx="12" cy="3" r="1" />
   </svg>
 );
+
+// The reference's own exact mega-menu collection icons (Frames/Trophies/
+// Photobooks/Invitations), copied verbatim from its buildChrome() megaCats
+// definition - not a substitute icon set.
+export const FramesIcon = (props) => (
+  <svg viewBox="0 0 24 24" {...props}>
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <circle cx="9.5" cy="10" r="2" />
+    <path d="M5 18l4.5-4 3 2.5L16 13l3 3" />
+  </svg>
+);
+
+export const TrophiesIcon = (props) => (
+  <svg viewBox="0 0 24 24" {...props}>
+    <path d="M7 4h10v5a5 5 0 0 1-10 0z" />
+    <path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3" />
+    <path d="M9 20h6M12 14v6" />
+  </svg>
+);
+
+export const PhotobooksIcon = (props) => (
+  <svg viewBox="0 0 24 24" {...props}>
+    <path d="M4 5.5A2 2 0 0 1 6 4h13v16H6a2 2 0 0 1-2-2z" />
+    <path d="M8 4v16" />
+  </svg>
+);
+
+export const InvitationsIcon = (props) => (
+  <svg viewBox="0 0 24 24" {...props}>
+    <rect x="3" y="5.5" width="18" height="13" rx="2" />
+    <path d="M3.6 7l8.4 6 8.4-6" />
+  </svg>
+);

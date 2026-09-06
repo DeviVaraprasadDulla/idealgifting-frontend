@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "./layout/MainLayout";
 
@@ -133,6 +133,17 @@ function App() {
         <Route path="/finder" element={<GiftFinder />} />
         <Route path="/stories" element={<Stories />} />
         <Route path="/feelings/:id" element={<FeelingDetail />} />
+
+        {/* Reference "Collections" - the real Frames/Trophies/Photobooks/
+            Invitations categories seeded alongside the reference catalog.
+            "Personalized" covers the whole real catalog (every product in
+            this business is a personalisation), matching the reference's
+            own broad use of that collection. */}
+        <Route path="/frames" element={<Navigate to="/products/category/frames" replace />} />
+        <Route path="/trophies" element={<Navigate to="/products/category/trophies" replace />} />
+        <Route path="/photobooks" element={<Navigate to="/products/category/photobooks" replace />} />
+        <Route path="/invitations" element={<Navigate to="/products/category/invitations" replace />} />
+        <Route path="/personalized" element={<Navigate to="/products" replace />} />
 
         <Route
           path="/wishlist"

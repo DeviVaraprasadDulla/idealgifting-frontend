@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { getMegaMenu } from "../../api/categoryApi";
 import { getTaxonomy } from "../../api/taxonomyApi";
 import { getFeaturedProducts } from "../../api/productApi";
 import { useAuth } from "../../context/AuthContext";
@@ -18,15 +17,26 @@ import {
   BurgerIcon,
   CloseIcon,
   ChevronIcon,
-  AnniversaryIcon,
-  BirthdayIcon,
+  FramesIcon,
+  TrophiesIcon,
+  PhotobooksIcon,
+  InvitationsIcon,
 } from "./navIcons";
 
 import logoHorizontal from "../../assets/logos/logo-horizontal.png";
 
 export const NAVBAR_HEIGHT = 76;
 
-const CATEGORY_ICONS = { default: AnniversaryIcon };
+// Exact reproduction of the reference's 4 mega-menu "Collections" cards -
+// icon, world, and description copied from its own megaCats array -
+// mapped onto the real Category rows seeded alongside the reference
+// catalog (same slugs: frames/trophies/photobooks/invitations).
+const REFERENCE_COLLECTIONS = {
+  frames: { label: "Frames", desc: "Love, family, baby, birthdays", world: "love", Icon: FramesIcon, href: "/frames" },
+  trophies: { label: "Trophies", desc: "Awards for people, not offices", world: "achievement", Icon: TrophiesIcon, href: "/trophies" },
+  photobooks: { label: "Photobooks", desc: "16 pages of your camera roll", world: "family", Icon: PhotobooksIcon, href: "/photobooks" },
+  invitations: { label: "Invitations", desc: "Digital and printed, illustrated", world: "wedding", Icon: InvitationsIcon, href: "/invitations" },
+};
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -36,7 +46,6 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [scrolled, setScrolled] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [occasions, setOccasions] = useState([]);
   const [recipients, setRecipients] = useState([]);
   const [featured, setFeatured] = useState(null);
@@ -86,7 +95,6 @@ const Navbar = () => {
 
   /* ================= Load mega-menu data ================= */
   useEffect(() => {
-    getMegaMenu().then((d) => setCategories(Array.isArray(d) ? d : [])).catch(() => {});
     getTaxonomy("occasion").then((res) => setOccasions(res.data)).catch(() => {});
     getTaxonomy("recipient").then((res) => setRecipients(res.data)).catch(() => {});
     getFeaturedProducts()
@@ -146,25 +154,17 @@ const Navbar = () => {
                       </div>
                     </div>
 
-                    <span className="eyebrow">Categories</span>
+                    <span className="eyebrow">Collections</span>
                     <div className="mega-cats" style={{ marginTop: 16 }}>
-                      {categories.map((cat) => {
-                        const IconComp = CATEGORY_ICONS[cat.slug] || (cat.name?.toLowerCase().includes("birthday") ? BirthdayIcon : AnniversaryIcon);
-                        return (
-                          <Link
-                            key={cat.id}
-                            className="mega-cat"
-                            to={`/products/category/${cat.slug}`}
-                            data-world={cat.name?.toLowerCase().includes("birthday") ? "birthday" : "love"}
-                          >
-                            <span className="ico">
-                              <IconComp fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                            </span>
-                            <b>{cat.name}</b>
-                            <span>{cat.subcategories?.length || 0} subcategories</span>
-                          </Link>
-                        );
-                      })}
+                      {Object.values(REFERENCE_COLLECTIONS).map(({ label, desc, world, Icon, href }) => (
+                        <Link key={href} className="mega-cat" to={href} data-world={world}>
+                          <span className="ico">
+                            <Icon fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          </span>
+                          <b>{label}</b>
+                          <span>{desc}</span>
+                        </Link>
+                      ))}
                     </div>
 
                     <div style={{ display: "flex", gap: 26, flexWrap: "wrap", marginTop: 26 }}>
@@ -304,6 +304,7 @@ const Navbar = () => {
         onClose={() => setSearchOpen(false)}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
+        onQuickSearch={setSearchValue}
         onSubmit={handleSearchSubmit}
         results={searchResults}
       />
