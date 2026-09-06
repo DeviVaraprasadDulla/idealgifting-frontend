@@ -33,4 +33,12 @@ export const RECIPIENT_META = {
   Client: { glyph: "🤝", world: "corporate", line: "Recognition, made personal." },
 };
 
+export const FEELING_META = {
+  Emotional: { glyph: "🥹", world: "love", line: "Turn memories into something unforgettable." },
+  Surprised: { glyph: "😍", world: "birthday", line: "Give them something they never saw coming." },
+  Loved: { glyph: "❤️", world: "love", line: "Make them feel like the most special person." },
+  Proud: { glyph: "🏆", world: "achievement", line: "Celebrate their journey and their wins." },
+  Special: { glyph: "✨", world: "wedding", line: "Because ordinary gifts are not for extraordinary people." },
+};
+
 export const DEFAULT_META = { glyph: "🎁", world: "love", line: "" };

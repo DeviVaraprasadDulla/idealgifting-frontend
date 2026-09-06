@@ -68,7 +68,7 @@ function TaxonomyDetailPage({ taxonomyName, backPath, backLabel, metaMap, defaul
   return (
     <div>
       <PageBanner
-        eyebrow={loading ? "Loading" : `${taxonomyName === "occasion" ? "Occasion" : "Recipient"} · ${option?.value}`}
+        eyebrow={loading ? "Loading" : `${taxonomyName.charAt(0).toUpperCase() + taxonomyName.slice(1)} · ${option?.value}`}
         title={meta.line || option?.value || ""}
         world={meta.world}
         glyph={meta.glyph}

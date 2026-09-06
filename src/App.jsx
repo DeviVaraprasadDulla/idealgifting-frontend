@@ -36,6 +36,7 @@ import Recipients from "./pages/Recipients";
 import RecipientDetail from "./pages/RecipientDetail";
 import GiftFinder from "./pages/GiftFinder";
 import Stories from "./pages/Stories";
+import FeelingDetail from "./pages/FeelingDetail";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
@@ -131,6 +132,7 @@ function App() {
         <Route path="/recipients/:id" element={<RecipientDetail />} />
         <Route path="/finder" element={<GiftFinder />} />
         <Route path="/stories" element={<Stories />} />
+        <Route path="/feelings/:id" element={<FeelingDetail />} />
 
         <Route
           path="/wishlist"
