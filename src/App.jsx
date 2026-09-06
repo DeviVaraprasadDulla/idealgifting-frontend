@@ -29,6 +29,12 @@ import Faq from "./pages/Faq";
 import HowItWorks from "./pages/HowItWorks";
 import Corporate from "./pages/Corporate";
 import NotFound from "./pages/NotFound";
+import Wishlist from "./pages/Wishlist";
+import Occasions from "./pages/Occasions";
+import OccasionDetail from "./pages/OccasionDetail";
+import Recipients from "./pages/Recipients";
+import RecipientDetail from "./pages/RecipientDetail";
+import GiftFinder from "./pages/GiftFinder";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
@@ -118,6 +124,20 @@ function App() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/how" element={<HowItWorks />} />
         <Route path="/corporate" element={<Corporate />} />
+        <Route path="/occasions" element={<Occasions />} />
+        <Route path="/occasions/:id" element={<OccasionDetail />} />
+        <Route path="/recipients" element={<Recipients />} />
+        <Route path="/recipients/:id" element={<RecipientDetail />} />
+        <Route path="/finder" element={<GiftFinder />} />
+
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
 
         {/* 404 (inside layout so nav/footer still render) */}
         <Route path="*" element={<NotFound />} />

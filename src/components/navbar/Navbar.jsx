@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, ShoppingCart, User, Search, X, ChevronDown } from "lucide-react";
+import { Menu, ShoppingCart, User, Search, X, ChevronDown, Heart } from "lucide-react";
 
 import { getMegaMenu } from "../../api/categoryApi";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
 import MiniCartDrawer from "../cart/MiniCartDrawer";
 import SearchOverlay from "./SearchOverlay";
 import API from "../../api/axios";
@@ -17,6 +18,7 @@ export const NAVBAR_HEIGHT = 88;
 const Navbar = ({ topOffset = 0 }) => {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
+  const { wishlistItems } = useWishlist();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -154,6 +156,20 @@ const Navbar = ({ topOffset = 0 }) => {
             ))}
 
             <Link
+              to="/occasions"
+              className="px-[15px] py-[10px] rounded-full text-[0.9rem] text-navy hover:bg-navy/[0.04] transition-colors"
+            >
+              Occasions
+            </Link>
+
+            <Link
+              to="/finder"
+              className="px-[15px] py-[10px] rounded-full text-[0.9rem] text-navy hover:bg-navy/[0.04] transition-colors"
+            >
+              Gift Finder
+            </Link>
+
+            <Link
               to="/how"
               className="px-[15px] py-[10px] rounded-full text-[0.9rem] text-navy hover:bg-navy/[0.04] transition-colors"
             >
@@ -177,6 +193,19 @@ const Navbar = ({ topOffset = 0 }) => {
             >
               <Search size={20} />
             </button>
+
+            <Link
+              to="/wishlist"
+              aria-label="Wishlist"
+              className="relative hidden md:grid w-[42px] h-[42px] rounded-full place-items-center hover:bg-navy/[0.05] transition text-navy"
+            >
+              <Heart size={20} />
+              {wishlistItems.length > 0 && (
+                <span className="absolute top-[4px] right-[3px] min-w-[18px] h-[18px] px-[5px] rounded-full bg-peach-deep text-white text-[0.68rem] font-num font-extrabold grid place-items-center">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </Link>
 
             <button
               onClick={() => setCartOpen(true)}
@@ -340,6 +369,18 @@ const Navbar = ({ topOffset = 0 }) => {
             <hr className="my-6 border-navy/10" />
 
             <div className="space-y-1 mb-4">
+              <Link
+                to="/wishlist"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-between py-3 font-medium text-navy/80"
+              >
+                Wishlist
+                {wishlistItems.length > 0 && (
+                  <span className="bg-peach-deep text-white text-xs font-num font-bold px-2 py-0.5 rounded-full">
+                    {wishlistItems.length}
+                  </span>
+                )}
+              </Link>
               <Link
                 to="/how"
                 onClick={() => setMobileOpen(false)}
